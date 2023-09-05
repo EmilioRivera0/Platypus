@@ -1,18 +1,27 @@
 // necessary includes -------->
-#include <iostream>
-#include <fstream>
-#include <ostream>
 #include <regex>
+#include "../headers/exceptions.h"
+#include "../headers/file_operations.h"
 
 // function definition -------->
-void open_jec_file(const char* file_name){
+std::ifstream open_jec_file(const char* file_name){
+  // local variable declaration
+  std::ifstream source_file;
   // check if source file name is correct
   if (std::regex_match(file_name,std::regex("(.*)(.jec)"))) {
     std::cout << "Correct File Name." << std::endl;
     // open file and check if operation was successful
-    std::ifstream source_file(file_name);
+    source_file.open(file_name);
     if (source_file.is_open()) {
       std::cout << "File Opened Successfully" << std::endl;
+      return source_file;
     }
+    else{
+      throw exc::FileNotOpened();
+    }
+  }else{
+    throw exc::FileName();
+    //exception thrown
   }
+  return source_file;
 }
