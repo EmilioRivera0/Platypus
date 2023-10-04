@@ -37,21 +37,27 @@ void lexical_analysis(std::ifstream &source_file)
   // get line
   while (source_file.getline(line_buffer, LINE_BUFFER_SIZE))
   {
-    i++;
+
     temp_c_ptr = strtok(line_buffer, " ");
 
     // get token
     while (temp_c_ptr != nullptr)
     {
-      // Buscar los inicios de subtokens
+
+      // search for subtokens inside each token pointed by temp_c_ptr
+      subtokens_vec.push_back(temp_c_ptr);
+      token_it = temp_c_ptr;
+      while (*token_it != '\000')
+      {
+        token_buffer[index] = *token_it;
+
+        token_it++;
+        index++;
+      }
 
       // lexical analyzer code ...
-      // regex_match(input, e)
-      std::cout << "line: " << i << " : " << temp_c_ptr << std::endl;
 
       temp_c_ptr = strtok(nullptr, " ");
     }
   }
-
-  std::cout << "Done" << std::endl;
 }
