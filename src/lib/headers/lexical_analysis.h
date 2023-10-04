@@ -5,9 +5,11 @@
 #include <fstream>
 #include <cstring>
 #include <iostream>
+#include <vector>
 
 // macros definition -------->
 #define LINE_BUFFER_SIZE 300
+#define TOKEN_BUFFER_SIZE 50
 
 // function declaration -------->
 void lexical_analysis(std::ifstream&);
