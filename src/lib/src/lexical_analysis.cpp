@@ -43,6 +43,7 @@ void lexical_analysis(std::ifstream &source_file)
     // get token
     while (temp_c_ptr != nullptr)
     {
+      // Buscar los inicios de subtokens
 
       // lexical analyzer code ...
       // regex_match(input, e)
