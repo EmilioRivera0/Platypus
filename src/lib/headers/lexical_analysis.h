@@ -6,12 +6,13 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+#include <regex>
 
 // macros definition -------->
 #define LINE_BUFFER_SIZE 300
 #define TOKEN_BUFFER_SIZE 50
 
 // function declaration -------->
-void lexical_analysis(std::ifstream&);
+void lexical_analysis(std::ifstream &);
 
 #endif // !LEXICAL_ANALYSIS_H

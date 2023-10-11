@@ -1,14 +1,16 @@
 // necessary imports -------->
 #include "../headers/lexical_analysis.h"
-#include <regex>
-#include <vector>
 
 void lexical_analysis(std::ifstream &source_file)
 {
   std::cout << "\nLexical scanning..." << std::endl;
   // local variables declaration
   char line_buffer[LINE_BUFFER_SIZE]{""};
+  char token_buffer[TOKEN_BUFFER_SIZE]{""};
+  short int index{0};
   char *temp_c_ptr{nullptr};
+  char *token_it{nullptr};
+  std::vector<const char *> subtokens_vec{};
 
   // Regular expressions
   std::vector<std::regex> regular_expressions = {
@@ -24,16 +26,15 @@ void lexical_analysis(std::ifstream &source_file)
       // logical operators
       std::regex("(([|][|])|(&&)|(==)|(!=)|(<!>)|(<->)|(<|>)(=)?)"),
 
-      // asignation
+      // assignation
       std::regex("(=|<-)"),
 
       // arithmetical operators
       std::regex("([*]|[+]|/|-|%|:(D|/|\\]|\\(|)|:\\))"),
 
       // symbols
-      std::regex("(\\(|\\)|\\{|\\}|\\[|\\]|\\;)")};
+      std::regex("(\\(|\\)|\\{|\\}|\\[|\\]|\\;|\\')")};
 
-  int i = 0;
   // get line
   while (source_file.getline(line_buffer, LINE_BUFFER_SIZE))
   {
@@ -44,7 +45,7 @@ void lexical_analysis(std::ifstream &source_file)
     while (temp_c_ptr != nullptr)
     {
 
-      // search for subtokens inside each token pointed by temp_c_ptr
+      // search for sub-tokens inside each token pointed by temp_c_ptr
       subtokens_vec.push_back(temp_c_ptr);
       token_it = temp_c_ptr;
       while (*token_it != '\000')
