@@ -6,6 +6,7 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+#include <map>
 
 // macros definition -------->
 #define LINE_BUFFER_SIZE 300
