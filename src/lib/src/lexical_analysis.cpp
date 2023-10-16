@@ -6,11 +6,14 @@ void lexical_analysis(std::ifstream &source_file)
   std::cout << "\nLexical scanning..." << std::endl;
   // local variables declaration
   char line_buffer[LINE_BUFFER_SIZE]{""};
-  char token_buffer[TOKEN_BUFFER_SIZE]{""};
+  char token_buffer[TOKEN_BUFFER_SIZE];
   short int index{0};
   char *temp_c_ptr{nullptr};
   char *token_it{nullptr};
   std::vector<const char *> subtokens_vec{};
+
+  // initialize buffers with cstring end character
+  memset(token_buffer, '\000', TOKEN_BUFFER_SIZE);
 
   // Regular expressions
   std::vector<std::regex> regular_expressions = {

@@ -6,7 +6,11 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
+<<<<<<< HEAD
 #include <regex>
+=======
+#include <map>
+>>>>>>> juanpablo
 
 // macros definition -------->
 #define LINE_BUFFER_SIZE 300
