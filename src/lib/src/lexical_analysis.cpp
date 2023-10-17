@@ -7,10 +7,11 @@ void lexical_analysis(std::ifstream &source_file)
   // local variables declaration
   char line_buffer[LINE_BUFFER_SIZE]{""};
   char token_buffer[TOKEN_BUFFER_SIZE];
-  short int index{0};
   char *temp_c_ptr{nullptr};
-  char *token_it{nullptr};
+
   std::vector<const char *> subtokens_vec{};
+  char *token_it{nullptr};
+  short int index{0};
 
   // initialize buffers with cstring end character
   memset(token_buffer, '\000', TOKEN_BUFFER_SIZE);
@@ -36,7 +37,8 @@ void lexical_analysis(std::ifstream &source_file)
       std::regex("([*]|[+]|/|-|%|:(D|/|\\]|\\(|)|:\\))"),
 
       // symbols
-      std::regex("(\\(|\\)|\\{|\\}|\\[|\\]|\\;|\\')")};
+      std::regex("(\\(|\\)|\\{|\\}|\\[|\\]|\\;|\\')"),
+  };
 
   // get line
   while (source_file.getline(line_buffer, LINE_BUFFER_SIZE))
@@ -48,12 +50,14 @@ void lexical_analysis(std::ifstream &source_file)
     while (temp_c_ptr != nullptr)
     {
 
+      std::cout << "\nNew Line" << std::endl;
       // search for sub-tokens inside each token pointed by temp_c_ptr
       subtokens_vec.push_back(temp_c_ptr);
       token_it = temp_c_ptr;
       while (*token_it != '\000')
       {
-        token_buffer[index] = *token_it;
+        // token_buffer[index] = *token_it;
+        std::cout << *token_it << std::endl;
 
         token_it++;
         index++;
@@ -64,4 +68,5 @@ void lexical_analysis(std::ifstream &source_file)
       temp_c_ptr = strtok(nullptr, " ");
     }
   }
+  std::cout << "\nLexical done" << std::endl;
 }

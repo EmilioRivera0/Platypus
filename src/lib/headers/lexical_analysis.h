@@ -6,14 +6,10 @@
 #include <cstring>
 #include <iostream>
 #include <vector>
-<<<<<<< HEAD
 #include <regex>
-=======
-#include <map>
->>>>>>> juanpablo
 
 // macros definition -------->
-#define LINE_BUFFER_SIZE 300
+#define LINE_BUFFER_SIZE 500
 #define TOKEN_BUFFER_SIZE 50
 
 // function declaration -------->

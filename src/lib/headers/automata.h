@@ -4,10 +4,11 @@
 #include <regex>
 #include <string>
 
-class Automata {
-
+class Automata
+{
 private:
-    struct transition_struct {
+    struct transition_struct
+    {
         const std::regex transition;
         const unsigned short next_state;
     };
@@ -19,6 +20,6 @@ private:
     std::map<const unsigned short, std::string> final_states;
 
 public:
-    Automata (void);
+    Automata(void);
     void run(void);
 }
