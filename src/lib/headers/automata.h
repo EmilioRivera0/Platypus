@@ -3,6 +3,7 @@
 #include <map>
 #include <regex>
 #include <string>
+#include <iostream>
 
 class Automata
 {
@@ -13,13 +14,11 @@ private:
         const unsigned short next_state;
     };
 
-    std::string currentState;
-
     std::vector<std::vector<struct transition_struct>> transition_rules;
 
     std::map<const unsigned short, std::string> final_states;
 
 public:
     Automata(void);
-    void run(void);
-}
+    void run(std::string);
+};

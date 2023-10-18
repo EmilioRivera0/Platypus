@@ -8,14 +8,14 @@ int main(int argc, char *argv[])
 {
   // program variables
   std::ifstream source_code_file;
-  try
-  {
-    source_code_file = open_jec_file(get_parameters(argc, argv));
-    lexical_analysis(source_code_file);
-  }
-  catch (const std::exception &e)
-  {
-    std::cout << e.what() << std::endl;
-  }
+  // try
+  // {
+  source_code_file = open_jec_file(get_parameters(argc, argv));
+  lexical_analysis(source_code_file);
+  // }
+  // catch (const std::exception &e)
+  // {
+  //   std::cout << e.what() << std::endl;
+  // }
   return 0;
 }
