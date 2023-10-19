@@ -5,441 +5,454 @@ Automata::Automata()
 {
     // final states
     this->final_states = {
-        {3, "#rword"},   // NUM
-        {6, "#rword"},   // LUP
-        {9, "#rword"},   // RTN
-        {12, "#rword"},  // PTR
-        {15, "#rword"},  // FUN
-        {17, "#rword"},  // IF
-        {19, "#rword"},  // OR
-        {22, "#rword"},  // ELS
-        {24, "#rword"},  // EIF
-        {27, "#rword"},  // AND
-        {29, "#rword"},  // ARR
-        {32, "#rword"},  // CMT
-        {35, "#rword"},  // STR
-        {36, "#rword"},  // STX
-        {39, "#rword"},  // TOF
-        {41, "#id"},     // Identifier
-        {45, "#macro"},  // $DEF
-        {48, "#header"}, // $LIB
-        {50, "#logic"},  // &&
-        {52, "#logic"},  // ||
-        {53, "#logic"},  // <
-        {54, "#assign"}, // <-
-        {55, "#logic"},  // <->
-        {56, "#logic"},  // <=
-        {58, "#logic"},  // <!>
-        {59, "#logic"},  // >
-        {60, "#logic"},  // >=
-        {61, "#group"},  // (
-        {62, "#group"},  // )
-        {63, "#group"},  // {
-        {64, "#group"},  // }
-        {65, "#group"},  // [
-        {66, "#group"},  // ]
-        {67, "#math"},   // +
-        {68, "#math"},   // -
-        {69, "#math"},   // *
-        {70, "#math"},   // /
-        {71, "#math"},   // %
-        {72, "#int"},    // int number
-        {74, "#float"},  // float number
-        {76, "#string"}, // 'string'
-        {78, "#string"}, // "string"
-        {79, "#eol"},    // ;
+        {4, "#rword"},   // NUM
+        {5, "#logic"},   // NOT
+        {8, "#rword"},   // LUP
+        {11, "#rword"},  // RTN
+        {14, "#rword"},  // PTR
+        {17, "#rword"},  // FUN
+        {19, "#rword"},  // IF
+        {21, "#logic"},  // OR
+        {24, "#rword"},  // ELS
+        {26, "#rword"},  // EIF
+        {29, "#logic"},  // AND
+        {31, "#rword"},  // ARR
+        {34, "#rword"},  // CMT
+        {37, "#rword"},  // STR
+        {38, "#rword"},  // STX
+        {41, "#rword"},  // TOF
+        {43, "#id"},     // Identifier
+        {47, "#macro"},  // $DEF
+        {50, "#header"}, // $LIB
+        {52, "#logic"},  // &&
+        {54, "#logic"},  // ||
+        {55, "#logic"},  // <
+        {56, "#assign"}, // <-
+        {57, "#logic"},  // <->
+        {58, "#logic"},  // <=
+        {60, "#logic"},  // <!>
+        {61, "#logic"},  // >
+        {62, "#logic"},  // >=
+        {63, "#logic"},  // !
+        {64, "#group"},  // (
+        {65, "#group"},  // )
+        {66, "#group"},  // {
+        {67, "#group"},  // }
+        {68, "#group"},  // [
+        {69, "#group"},  // ]
+        {70, "#math"},   // +
+        {71, "#math"},   // -
+        {72, "#math"},   // *
+        {73, "#math"},   // /
+        {74, "#math"},   // %
+        {75, "#int"},    // int number
+        {77, "#float"},  // float number
+        {79, "#string"}, // 'string'
+        {81, "#string"}, // "string"
+        {82, "#eol"},    // ;
     };
 
     //? q0
     this->transition_rules.push_back({
-        // NUM
+        // NUM | NOT
         {std::regex("N"), 1},
         // LUP
-        {std::regex("L"), 4},
+        {std::regex("L"), 6},
         // RTN
-        {std::regex("R"), 7},
+        {std::regex("R"), 9},
         // PTR
-        {std::regex("P"), 10},
+        {std::regex("P"), 12},
         // FUN
-        {std::regex("F"), 13},
+        {std::regex("F"), 15},
         // IF
-        {std::regex("I"), 16},
+        {std::regex("I"), 18},
         // OR
-        {std::regex("O"), 18},
+        {std::regex("O"), 20},
         // ELS | EIF
-        {std::regex("E"), 20},
+        {std::regex("E"), 22},
         // AND | ARR
-        {std::regex("A"), 25},
+        {std::regex("A"), 27},
         // CMT
-        {std::regex("C"), 30},
+        {std::regex("C"), 32},
         // STR | STX
-        {std::regex("S"), 31},
+        {std::regex("S"), 35},
         // TOF
-        {std::regex("T"), 34},
+        {std::regex("T"), 39},
         // identificador '_'
-        {std::regex("_"), 40},
+        {std::regex("_"), 42},
         // identificador
-        {std::regex("[a-z]|[A-Z]"), 41},
+        {std::regex("[a-z]|[A-Z]"), 43},
         // $DEF | $LIB
-        {std::regex("\\$"), 42},
+        {std::regex("\\$"), 44},
         //&&
-        {std::regex("&"), 49},
+        {std::regex("&"), 51},
         //||
-        {std::regex("\\|"), 51},
+        {std::regex("\\|"), 53},
         //<->, <=, <!>
-        {std::regex("<"), 53},
+        {std::regex("<"), 55},
         //>=
-        {std::regex(">"), 59},
+        {std::regex(">"), 61},
+        //!
+        {std::regex("\\!"), 63},
         //(
-        {std::regex("\\("), 61},
+        {std::regex("\\("), 64},
         //)
-        {std::regex("\\)"), 62},
+        {std::regex("\\)"), 65},
         //{
-        {std::regex("\\{"), 63},
+        {std::regex("\\{"), 66},
         //}
-        {std::regex("\\}"), 64},
+        {std::regex("\\}"), 67},
         //[
-        {std::regex("\\["), 65},
+        {std::regex("\\["), 68},
         //]
-        {std::regex("\\]"), 66},
+        {std::regex("\\]"), 69},
         // //+
-        {std::regex("\\+"), 67},
+        {std::regex("\\+"), 70},
         // //-
-        {std::regex("-"), 68},
+        {std::regex("-"), 71},
         //*
-        {std::regex("\\*"), 69},
+        {std::regex("\\*"), 72},
         // /
-        {std::regex("/"), 70},
+        {std::regex("/"), 73},
         //%
-        {std::regex("%"), 71},
+        {std::regex("%"), 74},
         // 0-9
-        {std::regex("[0-9]"), 72},
+        {std::regex("[0-9]"), 75},
         // '
-        {std::regex("\\'"), 75},
+        {std::regex("\\'"), 78},
         // "
-        {std::regex("\u0022"), 77},
+        {std::regex("\u0022"), 80},
         // ;
-        {std::regex("\\;"), 79},
+        {std::regex("\\;"), 82},
     });
     //? q1 | N
     this->transition_rules.push_back({
         {std::regex("U"), 2},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("O"), 3},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
     //? q2 | NU
     this->transition_rules.push_back({
-        {std::regex("M"), 3},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("M"), 4},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q3 | NUM
+    //? q3 | NO
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("T"), 5},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q4 | L
+    //* q4 | NUM
     this->transition_rules.push_back({
-        {std::regex("U"), 5},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q5 | LU
+    //* q5 | NOT
     this->transition_rules.push_back({
-        {std::regex("P"), 6},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q6 | LUP
+    //? q6 | L
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("U"), 7},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q7 | R
+    //? q7 | LU
     this->transition_rules.push_back({
-        {std::regex("T"), 8},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("P"), 8},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q8 | RT
+    //* q8 | LUP
     this->transition_rules.push_back({
-        {std::regex("N"), 9},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q9 | RTN
+    //? q9 | R
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("T"), 10},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q10 | P
+    //? q10 | RT
     this->transition_rules.push_back({
-        {std::regex("T"), 11},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("N"), 11},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q11 | PT
+    //* q11 | RTN
     this->transition_rules.push_back({
-        {std::regex("R"), 12},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q12 | PTR
+    //? q12 | P
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("T"), 13},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q13 | F
+    //? q13 | PT
     this->transition_rules.push_back({
-        {std::regex("U"), 14},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("R"), 14},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q14 | FU
+    //* q14 | PTR
     this->transition_rules.push_back({
-        {std::regex("N"), 15},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q15 | FUN
+    //? q15 | F
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("U"), 16},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q16 | I
+    //? q16 | FU
     this->transition_rules.push_back({
-        {std::regex("F"), 17},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("N"), 17},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q17 | IF
+    //* q17 | FUN
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q18 | O
+    //? q18 | I
     this->transition_rules.push_back({
-        {std::regex("R"), 19},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("F"), 19},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q19 | OR
+    //* q19 | IF
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q20 | E
+    //? q20 | O
     this->transition_rules.push_back({
-        {std::regex("L"), 21},
-        {std::regex("I"), 23},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("R"), 21},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q21 | EL
+    //* q21 | OR
     this->transition_rules.push_back({
-        {std::regex("S"), 22},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q22 | ELS
+    //? q22 | E
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("L"), 23},
+        {std::regex("I"), 25},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q23 | EI
+    //? q23 | EL
     this->transition_rules.push_back({
-        {std::regex("F"), 24},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("S"), 24},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q24 | EIF
+    //* q24 | ELS
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q25 | A
+    //? q25 | EI
     this->transition_rules.push_back({
-        {std::regex("N"), 26},
-        {std::regex("R"), 28},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("F"), 26},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q26 | AN
+    //* q26 | EIF
     this->transition_rules.push_back({
-        {std::regex("D"), 27},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q27 | AND
+    //? q27 | A
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("N"), 28},
+        {std::regex("R"), 30},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q28 | AR
+    //? q28 | AN
     this->transition_rules.push_back({
-        {std::regex("R"), 29},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("D"), 29},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q29 | ARR
+    //* q29 | AND
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q30 | C
+    //? q30 | AR
     this->transition_rules.push_back({
-        {std::regex("M"), 31},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("R"), 31},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q31 | CM
+    //* q31 | ARR
     this->transition_rules.push_back({
-        {std::regex("T"), 32},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q32 | CMT
+    //? q32 | C
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("M"), 33},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q33 | S
+    //? q33 | CM
     this->transition_rules.push_back({
         {std::regex("T"), 34},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q34 | ST
+    //* q34 | CMT
     this->transition_rules.push_back({
-        {std::regex("R"), 35},
-        {std::regex("X"), 36},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q35 | STR
+    //? q35 | S
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("T"), 36},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q36 | STX
+    //? q36 | ST
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("R"), 37},
+        {std::regex("X"), 38},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q37 | T
+    //* q37 | STR
     this->transition_rules.push_back({
-        {std::regex("O"), 38},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q38 | TO
+    //* q38 | STX
     this->transition_rules.push_back({
-        {std::regex("F"), 39},
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q39 | TOF
+    //? q39 | T
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("O"), 40},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q40 | _
+    //? q340 | TO
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]"), 41},
+        {std::regex("F"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //* q41 | _ o [a-Z]
+    //* q41 | TOF
     this->transition_rules.push_back({
-        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 41},
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
     });
-    //? q42 | $
+    //? q42 | _
+    this->transition_rules.push_back({
+        {std::regex("[a-z]|[A-Z]"), 43},
+    });
+    //* q43 | _ o [a-Z]
+    this->transition_rules.push_back({
+        {std::regex("[a-z]|[A-Z]|[0-9]|_"), 43},
+    });
+    //? q44 | $
     this->transition_rules.push_back({
         {std::regex("D"), 43},
         {std::regex("L"), 46},
     });
-    //? q43 | $D
+    //? q45 | $D
     this->transition_rules.push_back({
         {std::regex("E"), 44},
     });
-    //? 4q4 | $DE
+    //? q46 | $DE
     this->transition_rules.push_back({
         {std::regex("F"), 45},
     });
-    //* q45 | $DEF
+    //* q47 | $DEF
     this->transition_rules.push_back({});
-    //? q46 | $L
+    //? q48 | $L
     this->transition_rules.push_back({
         {std::regex("I"), 47},
     });
-    //? q47 | $LI
+    //? q49 | $LI
     this->transition_rules.push_back({
         {std::regex("B"), 48},
     });
-    //* q48 | $LIB
+    //* q50 | $LIB
     this->transition_rules.push_back({});
-    //? q49 | &
+    //? q51 | &
     this->transition_rules.push_back({
         {std::regex("&"), 50},
     });
-    //* q50 | &&
+    //* q52 | &&
     this->transition_rules.push_back({});
-    //? q51 | |
+    //? q53 | |
     this->transition_rules.push_back({
-        {std::regex("\\|"), 52},
+        {std::regex("\\|"), 54},
     });
-    //* q52 | ||
+    //* q54 | ||
     this->transition_rules.push_back({});
-    //* q53 | <
+    //* q55 | <
     this->transition_rules.push_back({
-        {std::regex("-"), 54},
-        {std::regex("="), 56},
-        {std::regex("!"), 57},
+        {std::regex("-"), 56},
+        {std::regex("="), 58},
+        {std::regex("!"), 59},
     });
-    //* q54 | <-
+    //* q56 | <-
     this->transition_rules.push_back({
-        {std::regex(">"), 55},
+        {std::regex(">"), 57},
     });
-    //* q55 | <->
+    //* q57 | <->
     this->transition_rules.push_back({});
-    //* q56 | <=
+    //* q58 | <=
     this->transition_rules.push_back({});
-    //? q57 | <!
+    //? q59 | <!
     this->transition_rules.push_back({
-        {std::regex(">"), 23},
+        {std::regex(">"), 60},
     });
-    //* q58 | <!>
+    //* q60 | <!>
     this->transition_rules.push_back({});
-    //* q59 | >
+    //* q61 | >
     this->transition_rules.push_back({
         {std::regex("="), 60},
     });
-    //* q60 | >=
+    //* q62 | >=
     this->transition_rules.push_back({});
-    //* q61 | (
+    //* q63 | !
     this->transition_rules.push_back({});
-    //* q62 | )
+    //* q64 | (
     this->transition_rules.push_back({});
-    //* q63 | {
+    //* q65 | )
     this->transition_rules.push_back({});
-    //* q64 | }
+    //* q66 | {
     this->transition_rules.push_back({});
-    //* q65 | [
+    //* q67 | }
     this->transition_rules.push_back({});
-    //* q66 | ]
+    //* q68 | [
     this->transition_rules.push_back({});
-    //* q67 | +
+    //* q69 | ]
     this->transition_rules.push_back({});
-    //* q68 | -
+    //* q70 | +
     this->transition_rules.push_back({});
-    //* q69 | *
+    //* q71 | -
+    this->transition_rules.push_back({
+        {std::regex("[0-9]"), 75},
+    });
+    //* q72 | *
     this->transition_rules.push_back({});
-    //* q70 | /
+    //* q73 | /
     this->transition_rules.push_back({});
-    //* q71 | %
+    //* q74 | %
     this->transition_rules.push_back({});
-    //* q72 | [0-9]
+    //* q75 | [0-9]
     this->transition_rules.push_back({
         {std::regex("[0-9]"), 72},
         {std::regex("\\."), 73},
     });
-    //? q73 | [0-9] .
+    //? q76 | [0-9] .
     this->transition_rules.push_back({
         {std::regex("[0-9]"), 74},
     });
-    //* q74 | [0-9] .
+    //* q77 | [0-9] .
     this->transition_rules.push_back({
         {std::regex("[0-9]"), 74},
     });
-    //? q75 | '
+    //? q78 | '
     this->transition_rules.push_back({
         {std::regex("\\'"), 76},
         {std::regex("."), 75},
     });
-    //* q76 | 'lo que sea'
+    //* q79 | 'lo que sea'
     this->transition_rules.push_back({});
-    //? q77 | "
+    //? q80 | "
     this->transition_rules.push_back({
         {std::regex("\u0022"), 78},
         {std::regex("."), 77},
     });
-    //* q78 | "lo que sea"
+    //* q81 | "lo que sea"
     this->transition_rules.push_back({});
-    //* q79 | ;
+    //* q82 | ;
     this->transition_rules.push_back({});
 }
 
-void Automata::run(std::string line)
+void Automata::run(std::string line, std::map<std::string, std::string> &symbols_table, std::vector<unsigned> &line_errors)
 {
-    std::cout << line << std::endl;
-
     unsigned short state_index = 0;
     std::string temp_token = "";
 
     for (unsigned i = 0; i < line.length(); i++)
     {
-        // std::cout << state_index << std::endl;
-        // std::cout << line[i] << std::endl;
-
         std::string char_to_validate(1, line[i]);
         bool has_match = false;
 
@@ -458,19 +471,18 @@ void Automata::run(std::string line)
         {
             if (this->final_states.count(state_index) > 0)
             {
-                std::cout << this->final_states[state_index] << std::endl;
-                std::cout << temp_token << std::endl;
+                symbols_table[temp_token] = this->final_states[state_index];
                 temp_token = "";
             }
             else
             {
-                std::cout << "Error" << std::endl;
-                std::cout << temp_token << std::endl;
+                line_errors.push_back(i);
+                std::cout << "\nSimbolo No Reconocido: " << line[i] << std::endl;
             }
 
             if (!has_match)
             {
-                if (!(line[i] == ' ' || line[i] == '\t'))
+                if (!(line[i] == ' ' || line[i] == '\t' || state_index == 0))
                 {
                     i--;
                 }
