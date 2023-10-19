@@ -18,11 +18,11 @@ void print_map(std::map<std::string, std::string> map)
 
 void print_map(std::map<unsigned, std::vector<char>> map)
 {
-    std::cout << std::left << std::setw(20) << "Linea"
-              << "    |    " << std::setw(10) << "Caracteres" << std::endl;
+    std::cout << std::left << std::setw(8) << "Linea"
+              << "    |    " << std::setw(8) << "Caracteres" << std::endl;
     for (const auto &par : map)
     {
-        std::cout << std::left << std::setw(20) << par.first << "    |    " << std::setw(10);
+        std::cout << std::left << std::setw(8) << par.first << "    |    " << std::setw(8);
 
         for (char c : par.second)
         {
