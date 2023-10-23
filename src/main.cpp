@@ -16,19 +16,21 @@ void print_map(std::map<std::string, std::string> map)
     }
 }
 
-void print_map(std::map<unsigned, std::vector<char>> map)
+void print_map(std::map<unsigned, std::map<unsigned, char>> map)
 {
     std::cout << std::left << std::setw(8) << "Linea"
-              << "    |    " << std::setw(8) << "Caracteres" << std::endl;
+              << "    |    " << std::setw(8) << "Columna"
+              << "    |    " << std::setw(8) << "Caracter"
+              << "    |    " << std::endl;
     for (const auto &par : map)
     {
-        std::cout << std::left << std::setw(8) << par.first << "    |    " << std::setw(8);
-
-        for (char c : par.second)
+        for (const auto &error : par.second)
         {
-            std::cout << c;
+            std::cout << std::left << std::setw(8) << par.first << "    |    ";
+            std::cout << std::setw(8) << error.first << "    |    ";
+            std::cout << std::setw(8) << error.second << "    |    ";
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
     }
 
     std::cout << "\n\n";
@@ -40,7 +42,7 @@ int main(int argc, char *argv[])
     // program variables
     std::ifstream source_code_file;
     std::map<std::string, std::string> symbols_table;
-    std::map<unsigned, std::vector<char>> lexical_errors;
+    std::map<unsigned, std::map<unsigned, char>> lexical_errors;
 
     try
     {

@@ -1,1 +1,5 @@
-!M@as
+NUM mayor <- 5..@5;
+NUM menor <- 4;
+NUM diferencia <- mayor - menor;
+STR _ahasi_123 <- "hoa?las  asd  @ asd";
+STR asd <- 'asd @ e rsdf ; : #$()=)(/&%$#"!|); sdfs  df sdfsfs sdg fg'

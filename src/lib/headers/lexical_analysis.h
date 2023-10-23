@@ -12,6 +12,6 @@
 // macros definition -------->
 
 // function declaration -------->
-void lexical_analysis(std::ifstream &, std::map<std::string, std::string> &, std::map<unsigned, std::vector<char>> &);
+void lexical_analysis(std::ifstream &, std::map<std::string, std::string> &, std::map<unsigned, std::map<unsigned, char>> &);
 
 #endif // !LEXICAL_ANALYSIS_H

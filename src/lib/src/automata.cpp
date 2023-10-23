@@ -430,15 +430,15 @@ Automata::Automata()
     });
     //? q78 | '
     this->transition_rules.push_back({
-        {std::regex("\\'"), 76},
-        {std::regex("."), 75},
+        {std::regex("\\'"), 79},
+        {std::regex("."), 78},
     });
     //* q79 | 'lo que sea'
     this->transition_rules.push_back({});
     //? q80 | "
     this->transition_rules.push_back({
-        {std::regex("\u0022"), 78},
-        {std::regex("."), 77},
+        {std::regex("\u0022"), 81},
+        {std::regex("."), 80},
     });
     //* q81 | "lo que sea"
     this->transition_rules.push_back({});

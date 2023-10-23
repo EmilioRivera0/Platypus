@@ -1,7 +1,7 @@
 // necessary imports -------->
 #include "../headers/lexical_analysis.h"
 
-void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::string> &symbols_table, std::map<unsigned, std::vector<char>> &lexical_errors)
+void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::string> &symbols_table, std::map<unsigned, std::map<unsigned, char>> &lexical_errors)
 {
     std::cout << "\nLexical scanning..." << std::endl;
 
@@ -11,13 +11,13 @@ void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::str
         std::regex("([-])?([0-9])+([.]([0-9])+)?"),
 
         // reserved words
-        std::regex("(N(UM|OT)|IF|CMT|ST(X|R)|A(ND|RR)|OR|E(IF|LS)|TOF|[$](DEF|LIB)|LUP|RTN|PTR|FUN)"),
+        std::regex("(NUM|IF|CMT|ST(X|R)|ARR|E(IF|LS)|TOF|[$](DEF|LIB)|LUP|RTN|PTR|FUN)"),
 
         // identifier
         std::regex("([_])?([a-z]|[A-Z])([_]|[a-z]|[A-Z]|[0-9])*"),
 
         // logical operators
-        std::regex("(([|][|])|(&&)|(<!>)|(<->)|(<|>)(=)?|\\!)"),
+        std::regex("(([|][|])|(&&)|(<!>)|(<->)|(<|>)(=)?|\\!|NOT|AND|OR)"),
 
         // assignation
         std::regex("(<-)"),
@@ -47,11 +47,11 @@ void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::str
 
         if (line_errors.size() > 0)
         {
-            std::vector<char> temp_array;
+            std::map<unsigned, char> temp_array;
 
             for (unsigned error : line_errors)
             {
-                temp_array.push_back(line_buffer[error]);
+                temp_array[error] = line_buffer[error];
             }
 
             lexical_errors[line_index] = temp_array;
