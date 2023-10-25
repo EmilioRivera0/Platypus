@@ -1,6 +1,8 @@
 // necessary includes -------->
 #include "../headers/automata.h"
 
+// functions definition -------->
+// constructor that initializes the transition rules and final states of the automata
 Automata::Automata()
 {
     // final states
@@ -51,8 +53,8 @@ Automata::Automata()
         {81, "#string"}, // "string"
         {82, "#eol"},    // ;
     };
-
-    //? q0
+    
+    // transition rules
     this->transition_rules.push_back({
         // NUM | NOT
         {std::regex("N"), 1},
@@ -446,44 +448,45 @@ Automata::Automata()
     this->transition_rules.push_back({});
 }
 
-void Automata::run(std::string line, std::map<std::string, std::string> &symbols_table, std::vector<unsigned> &line_errors)
-{
-    unsigned short state_index = 0;
-    std::string temp_token = "";
+// function in charge of doing the lexical analysis of the entire specified .jec file
+void Automata::run(std::string line, std::map<std::string, std::string> &symbols_table, std::vector<unsigned> &line_errors){
+  // local variables  
+  unsigned short state_index{0};
+  std::string temp_token{""};
+  bool has_match{false};
 
-    for (unsigned i = 0; i < line.length(); i++)
-    {
+    for (unsigned i = 0; i < line.length(); i++){
+        // get character to evaluate
         std::string char_to_validate(1, line[i]);
-        bool has_match = false;
-
-        for (transition_struct state : this->transition_rules[state_index])
-        {
-            if (std::regex_match(char_to_validate, state.transition))
-            {
+        // check if the current character has a transition available
+        for (transition_struct state : this->transition_rules[state_index]){
+            if (std::regex_match(char_to_validate, state.transition)){
                 state_index = state.next_state;
+                // indicate a match exists
                 has_match = true;
+                // store the current character in a temporal token
                 temp_token += line[i];
                 break;
             }
         }
-
-        if (!has_match || i == line.length() - 1)
-        {
-            if (this->final_states.count(state_index) > 0)
-            {
+        // no matching transition rule for the character was found
+        if (!has_match || i == line.length() - 1){
+            // check if state index is contained inside the final states
+            if (this->final_states.count(state_index) > 0){
+                // add the temporal token to the symbols table and its type
                 symbols_table[temp_token] = this->final_states[state_index];
+                // empty temporal token
                 temp_token = "";
             }
-            else
-            {
+            // save column number where the error/not matching character is found and output it
+            else{
                 line_errors.push_back(i);
-                std::cout << "\nSimbolo No Reconocido: " << line[i] << std::endl;
+                std::cout << "\nSymbol Not Recognised: " << line[i] << std::endl;
             }
-
-            if (!has_match)
-            {
-                if (!(line[i] == ' ' || line[i] == '\t' || state_index == 0))
-                {
+            // check if current character is not a white space, a tab or it is not accepted by the automata
+            if (!has_match){
+                if (!(line[i] == ' ' || line[i] == '\t' || state_index == 0)){
+                    // move back one character to start the analysis again
                     i--;
                 }
             }
