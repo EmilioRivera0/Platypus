@@ -26,7 +26,7 @@ $ ./Platypus <filepath>.jec
 ```
 
 ## Lexican Analyzer Automata
-<img src="media/Automata.pdf"/>
+![Automata.pdf](./media/Automata.pdf?raw=true)
 
 ## Authors
 
