@@ -20,5 +20,5 @@ private:
 
 public:
     Automata(void);
-    void run(std::string, std::map<std::string, std::string> &, std::vector<unsigned> &);
+    void run(std::string, std::map<std::string, std::string> &, std::vector<unsigned> &, std::vector<std::string> &);
 };

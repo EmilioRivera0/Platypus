@@ -1,7 +1,7 @@
 // necessary imports -------->
 #include "../headers/lexical_analysis.h"
 
-void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::string> &symbols_table, std::map<unsigned, std::map<unsigned, char>> &lexical_errors)
+void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::string> &symbols_table, std::map<unsigned, std::map<unsigned, char>> &lexical_errors, std::map<unsigned, std::vector<std::string>> &file_tokens)
 {
     std::cout << "\nLexical scanning..." << std::endl;
 
@@ -36,6 +36,7 @@ void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::str
     std::string line_buffer;
     unsigned line_index = 0;
     std::vector<unsigned> line_errors;
+    std::vector<std::string> line_tokens;
     Automata worker;
 
     // get line
@@ -43,7 +44,7 @@ void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::str
     {
         line_index++;
 
-        worker.run(line_buffer, symbols_table, line_errors);
+        worker.run(line_buffer, symbols_table, line_errors, line_tokens);
 
         if (line_errors.size() > 0)
         {
@@ -57,6 +58,13 @@ void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::str
             lexical_errors[line_index] = temp_array;
 
             line_errors.clear();
+        }
+
+        if (line_tokens.size() > 0)
+        {
+            file_tokens[line_index] = line_tokens;
+
+            line_tokens.clear();
         }
     }
 

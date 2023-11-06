@@ -5,22 +5,22 @@ Automata::Automata()
 {
     // final states
     this->final_states = {
-        {4, "#rword"},   // NUM
+        {4, "#dtype"},   // NUM
         {5, "#logic"},   // NOT
         {8, "#rword"},   // LUP
         {11, "#rword"},  // RTN
-        {14, "#rword"},  // PTR
+        {14, "#dtype"},  // PTR
         {17, "#rword"},  // FUN
         {19, "#rword"},  // IF
         {21, "#logic"},  // OR
         {24, "#rword"},  // ELS
         {26, "#rword"},  // EIF
         {29, "#logic"},  // AND
-        {31, "#rword"},  // ARR
+        {31, "#dtype"},  // ARR
         {34, "#rword"},  // CMT
-        {37, "#rword"},  // STR
-        {38, "#rword"},  // STX
-        {41, "#rword"},  // TOF
+        {37, "#dtype"},  // STR
+        {38, "#dtype"},  // STX
+        {41, "#dtype"},  // TOF
         {43, "#id"},     // Identifier
         {47, "#macro"},  // $DEF
         {50, "#header"}, // $LIB
@@ -417,16 +417,16 @@ Automata::Automata()
     this->transition_rules.push_back({});
     //* q75 | [0-9]
     this->transition_rules.push_back({
-        {std::regex("[0-9]"), 72},
-        {std::regex("\\."), 73},
+        {std::regex("[0-9]"), 75},
+        {std::regex("\\."), 76},
     });
     //? q76 | [0-9] .
     this->transition_rules.push_back({
-        {std::regex("[0-9]"), 74},
+        {std::regex("[0-9]"), 77},
     });
     //* q77 | [0-9] .
     this->transition_rules.push_back({
-        {std::regex("[0-9]"), 74},
+        {std::regex("[0-9]"), 77},
     });
     //? q78 | '
     this->transition_rules.push_back({
@@ -446,7 +446,7 @@ Automata::Automata()
     this->transition_rules.push_back({});
 }
 
-void Automata::run(std::string line, std::map<std::string, std::string> &symbols_table, std::vector<unsigned> &line_errors)
+void Automata::run(std::string line, std::map<std::string, std::string> &symbols_table, std::vector<unsigned> &line_errors, std::vector<std::string> &line_tokens)
 {
     unsigned short state_index = 0;
     std::string temp_token = "";
@@ -469,10 +469,14 @@ void Automata::run(std::string line, std::map<std::string, std::string> &symbols
 
         if (!has_match || i == line.length() - 1)
         {
-            if (this->final_states.count(state_index) > 0)
+            if (state_index == 34)
+            {
+                break;
+            }
+            else if (this->final_states.count(state_index) > 0)
             {
                 symbols_table[temp_token] = this->final_states[state_index];
-                temp_token = "";
+                line_tokens.push_back(temp_token);
             }
             else
             {
@@ -487,6 +491,7 @@ void Automata::run(std::string line, std::map<std::string, std::string> &symbols
                     i--;
                 }
             }
+            temp_token = "";
             state_index = 0;
         }
     }
