@@ -8,28 +8,6 @@
 #include "lib/headers/lexical_analysis.h"
 #include "lib/headers/console_output.h"
 
-void print_map(std::map<unsigned, std::vector<std::string>> map)
-{
-    std::cout << std::left << std::setw(6) << "Linea"
-              << " | "
-              << "Valor" << std::endl;
-    for (const auto &par : map)
-    {
-        std::cout << std::left << std::setw(6) << par.first << " | [";
-
-        for (const std::string &token : par.second)
-        {
-            std::cout << token;
-
-            if (token != par.second.back())
-            {
-                std::cout << ", ";
-            }
-        }
-        std::cout << "]" << std::endl;
-    }
-}
-
 // program entry point -------->
 int main(int argc, char *argv[])
 {
