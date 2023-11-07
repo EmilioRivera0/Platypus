@@ -14,6 +14,7 @@ const char* get_parameters(int argc, char *argv[]){
       std::cout << "Correct File Name." << std::endl;
     }
   }
+  // no file name specified in the arguments
   if (file_name == NULL) {
     throw exc::FileName();
   }

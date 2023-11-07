@@ -9,25 +9,18 @@ void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::str
     std::vector<std::regex> regular_expressions = {
         // number
         std::regex("([-])?([0-9])+([.]([0-9])+)?"),
-
         // reserved words
         std::regex("(NUM|IF|CMT|ST(X|R)|ARR|E(IF|LS)|TOF|[$](DEF|LIB)|LUP|RTN|PTR|FUN)"),
-
         // identifier
         std::regex("([_])?([a-z]|[A-Z])([_]|[a-z]|[A-Z]|[0-9])*"),
-
         // logical operators
         std::regex("(([|][|])|(&&)|(<!>)|(<->)|(<|>)(=)?|\\!|NOT|AND|OR)"),
-
         // assignation
         std::regex("(<-)"),
-
         // arithmetical operators
         std::regex("([*]|[+]|/|-|%)"),
-
         // strings
         std::regex("((\\'.\\')|(\u0022.\u0022))"),
-
         // symbols
         std::regex("(\\(|\\)|\\{|\\}|\\[|\\]|\\;)"),
     };
@@ -42,6 +35,7 @@ void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::str
     // get line
     while (std::getline(source_file, line_buffer))
     {
+        // update line index
         line_index++;
 
         worker.run(line_buffer, symbols_table, line_errors, line_tokens);
@@ -54,9 +48,7 @@ void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::str
             {
                 temp_array[error] = line_buffer[error];
             }
-
             lexical_errors[line_index] = temp_array;
-
             line_errors.clear();
         }
 
@@ -67,6 +59,5 @@ void lexical_analysis(std::ifstream &source_file, std::map<std::string, std::str
             line_tokens.clear();
         }
     }
-
     std::cout << "\nLexical done\n\n";
 }
