@@ -1,23 +1,23 @@
 // necessary includes -------->
 #include "../headers/parser.h"
 
-void analisis_sintactico(std::map<int, std::vector<std::string>> tokens, std::map<std::string, std::string> &symbol_table){
-    int indice = 0;
-    if(strcmp(symbol_table[tokens[0][0]].c_str(), "#macro") == 0){
-        indice += 1;
-        defSintactico(tokens, symbol_table, indice);
-        if(symbol_table.size() == indice){
-            std::cout<<"DONE";
+// functions definition -------->
+
+void Parser::analisis_parser(){
+    while(this->line_index < this->keys.size() && this->tokens_index < this->tokens[this->keys[this-line_index]].size()){
+
+        if(this->match("#macro")){
+            this->def_parser();
         }
-    }
-    else if(strcmp(symbol_table[tokens[0][0]].c_str(), "#header") == 0){
-        headerSintactico();
-    }
-    else if(strcmp(symbol_table[tokens[0][0]].c_str(), "#rword") == 0){
-        asignacionSintactico(tokens, symbol_table, indice);
-    }
-    else{
-        return;
+        else if(this->match("#header")){
+            this->lib_parser();
+        }
+        else if(this->match("#rword")){
+            this->asignacion_parser();
+        }
+        else{
+            
+        }
     }
 
 }
@@ -35,6 +35,9 @@ void defSintactico(std::map<int, std::vector<std::string>> tokens, std::map<std:
                 // analisis_sintactico();
             }
         }
+    }
+    else{
+
     }
 
 }
