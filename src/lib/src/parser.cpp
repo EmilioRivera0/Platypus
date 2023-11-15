@@ -1,7 +1,5 @@
-#include<iostream>
-#include<cstring>
-#include<map>
-#include<vector>
+// necessary includes -------->
+#include "../headers/parser.h"
 
 void analisis_sintactico(std::map<int, std::vector<std::string>> tokens, std::map<std::string, std::string> &symbol_table){
     int indice = 0;

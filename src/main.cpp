@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
     std::map<std::string, std::string> symbols_table;
     std::map<unsigned, std::map<unsigned, char>> lexical_errors;
     std::map<unsigned, std::vector<std::string>> file_tokens;
+    std::map<unsigned, std::map<unsigned, std::string>> parser_errors;
 
     try
     {
