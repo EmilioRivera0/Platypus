@@ -1,26 +1,28 @@
 // necessary includes -------->
 #include "../headers/automata.h"
 
+// functions definition -------->
+// constructor that initializes the transition rules and final states of the automata
 Automata::Automata()
 {
     // final states
     this->final_states = {
-        {4, "#rword"},   // NUM
+        {4, "#dtype"},   // NUM
         {5, "#logic"},   // NOT
         {8, "#rword"},   // LUP
         {11, "#rword"},  // RTN
-        {14, "#rword"},  // PTR
+        {14, "#dtype"},  // PTR
         {17, "#rword"},  // FUN
         {19, "#rword"},  // IF
         {21, "#logic"},  // OR
         {24, "#rword"},  // ELS
         {26, "#rword"},  // EIF
         {29, "#logic"},  // AND
-        {31, "#rword"},  // ARR
+        {31, "#dtype"},  // ARR
         {34, "#rword"},  // CMT
-        {37, "#rword"},  // STR
-        {38, "#rword"},  // STX
-        {41, "#rword"},  // TOF
+        {37, "#dtype"},  // STR
+        {38, "#dtype"},  // STX
+        {41, "#dtype"},  // TOF
         {43, "#id"},     // Identifier
         {47, "#macro"},  // $DEF
         {50, "#header"}, // $LIB
@@ -52,7 +54,7 @@ Automata::Automata()
         {82, "#eol"},    // ;
     };
 
-    //? q0
+    // transition rules
     this->transition_rules.push_back({
         // NUM | NOT
         {std::regex("N"), 1},
@@ -417,28 +419,28 @@ Automata::Automata()
     this->transition_rules.push_back({});
     //* q75 | [0-9]
     this->transition_rules.push_back({
-        {std::regex("[0-9]"), 72},
-        {std::regex("\\."), 73},
+        {std::regex("[0-9]"), 75},
+        {std::regex("\\."), 76},
     });
     //? q76 | [0-9] .
     this->transition_rules.push_back({
-        {std::regex("[0-9]"), 74},
+        {std::regex("[0-9]"), 77},
     });
     //* q77 | [0-9] .
     this->transition_rules.push_back({
-        {std::regex("[0-9]"), 74},
+        {std::regex("[0-9]"), 77},
     });
     //? q78 | '
     this->transition_rules.push_back({
-        {std::regex("\\'"), 76},
-        {std::regex("."), 75},
+        {std::regex("\\'"), 79},
+        {std::regex("."), 78},
     });
     //* q79 | 'lo que sea'
     this->transition_rules.push_back({});
     //? q80 | "
     this->transition_rules.push_back({
-        {std::regex("\u0022"), 78},
-        {std::regex("."), 77},
+        {std::regex("\u0022"), 81},
+        {std::regex("."), 80},
     });
     //* q81 | "lo que sea"
     this->transition_rules.push_back({});
@@ -446,47 +448,62 @@ Automata::Automata()
     this->transition_rules.push_back({});
 }
 
-void Automata::run(std::string line, std::map<std::string, std::string> &symbols_table, std::vector<unsigned> &line_errors)
+void Automata::run(std::string line, std::map<std::string, std::string> &symbols_table, std::vector<unsigned> &line_errors, std::vector<std::string> &line_tokens)
 {
     unsigned short state_index = 0;
     std::string temp_token = "";
+    bool has_match{false};
 
     for (unsigned i = 0; i < line.length(); i++)
     {
+        // get character to evaluate
         std::string char_to_validate(1, line[i]);
-        bool has_match = false;
-
+        has_match = false;
+        // check if the current character has a transition available
         for (transition_struct state : this->transition_rules[state_index])
         {
             if (std::regex_match(char_to_validate, state.transition))
             {
                 state_index = state.next_state;
+                // indicate a match exists
                 has_match = true;
+                // store the current character in a temporal token
                 temp_token += line[i];
                 break;
             }
         }
 
+        // no matching transition rule for the character was found
         if (!has_match || i == line.length() - 1)
         {
-            if (this->final_states.count(state_index) > 0)
+            if (state_index == 34)
             {
-                symbols_table[temp_token] = this->final_states[state_index];
-                temp_token = "";
+                break;
             }
+            // check if state index is contained inside the final states
+            else if (this->final_states.count(state_index) > 0)
+            {
+                // add the temporal token to the symbols table and its type
+                symbols_table[temp_token] = this->final_states[state_index];
+                line_tokens.push_back(temp_token);
+            }
+            // save column number where the error/not matching character is found and output it
             else
             {
                 line_errors.push_back(i);
-                std::cout << "\nSimbolo No Reconocido: " << line[i] << std::endl;
+                std::cout << "\nSymbol Not Recognised: " << line[i] << std::endl;
             }
-
+            // check if current character is not a white space, a tab or it is not accepted by the automata
             if (!has_match)
             {
                 if (!(line[i] == ' ' || line[i] == '\t' || state_index == 0))
                 {
+                    // move back one character to start the analysis again
                     i--;
                 }
             }
+            // empty temporal token
+            temp_token = "";
             state_index = 0;
         }
     }

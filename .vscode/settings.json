@@ -1,9 +1,14 @@
 {
     "cSpell.words": [
+        "dtype",
+        "rword",
         "subtokens"
     ],
     "files.associations": {
+<<<<<<< HEAD
         "map": "cpp",
+=======
+>>>>>>> main
         "algorithm": "cpp",
         "atomic": "cpp",
         "bit": "cpp",
@@ -30,11 +35,20 @@
         "iterator": "cpp",
         "limits": "cpp",
         "locale": "cpp",
+<<<<<<< HEAD
         "memory": "cpp",
         "new": "cpp",
         "optional": "cpp",
         "ostream": "cpp",
         "regex": "cpp",
+=======
+        "map": "cpp",
+        "memory": "cpp",
+        "new": "cpp",
+        "ostream": "cpp",
+        "regex": "cpp",
+        "sstream": "cpp",
+>>>>>>> main
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "string": "cpp",
