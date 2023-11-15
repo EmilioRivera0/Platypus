@@ -31,6 +31,34 @@ bool Parser::match(std::string tag, bool starting)
     }
 }
 
+// functions definition -------->
+
+void Parser::analisis_parser()
+{
+    unsigned line = this->keys[this->line_index];
+    while (this->line_index < this->keys.size() && this->tokens_index < this->tokens[line].size())
+    {
+
+        if (this->match("#macro", true))
+        {
+            this->def_parser();
+        }
+        else if (this->match("#header", true))
+        {
+            this->lib_parser();
+        }
+        else if (this->match("#rword", true))
+        {
+            this->asignacion_parser();
+        }
+        else
+        {
+        }
+
+        line = this->keys[this->line_index];
+    }
+}
+
 void analisis_sintactico(std::map<int, std::vector<std::string>> tokens, std::map<std::string, std::string> &symbol_table)
 {
     int indice = 0;
