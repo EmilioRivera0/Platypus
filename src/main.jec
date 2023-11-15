@@ -1,1 +1,2 @@
-!M@as
+NUM numero@ <- 5..9;
+STR cadena <- "esto es una cadena @JP";
