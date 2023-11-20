@@ -13,8 +13,7 @@ Parser::Parser(std::map<unsigned, std::vector<std::string>> &line_tokens, std::m
     this->line_index = 0;
 }
 
-bool Parser::match(std::string tag, bool starting)
-{
+bool Parser::match(std::string tag, bool starting) {
     if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), tag.c_str()) == 0)
     {
         this->tokens_index++;
@@ -31,10 +30,22 @@ bool Parser::match(std::string tag, bool starting)
     }
 }
 
+bool Parser::expression_parser() {
+    this->expression = "";
+    std::regex regex_expression("#id | #id#logic#id | #id#math#id | #int | #int#math#int | #float | #float#math#float | #string | #string#math#string");
+    while (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "#eol") != 0) {
+        this->expression += this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str();
+        this->tokens_index++;
+        if (!std::regex_match(this->expression, regex_expression)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // functions definition -------->
 
-void Parser::analisis_parser()
-{
+void Parser::analisis_parser() {
     unsigned line = this->keys[this->line_index];
     while (this->line_index < this->keys.size() && this->tokens_index < this->tokens[line].size())
     {
@@ -47,7 +58,7 @@ void Parser::analisis_parser()
         {
             this->lib_parser();
         }
-        else if (this->match("#rword", true))
+        else if (this->match("#dtype", true))
         {
             this->asignacion_parser();
         }
@@ -59,81 +70,28 @@ void Parser::analisis_parser()
     }
 }
 
-void analisis_sintactico(std::map<int, std::vector<std::string>> tokens, std::map<std::string, std::string> &symbol_table)
-{
-    int indice = 0;
-    if (strcmp(symbol_table[tokens[0][0]].c_str(), "#macro") == 0)
-    {
-        indice += 1;
-        defSintactico(tokens, symbol_table, indice);
-        if (symbol_table.size() == indice)
-        {
-            std::cout << "DONE";
-        }
-    }
-    else if (strcmp(symbol_table[tokens[0][0]].c_str(), "#header") == 0)
-    {
-        headerSintactico();
-    }
-    else if (strcmp(symbol_table[tokens[0][0]].c_str(), "#rword") == 0)
-    {
-        asignacionSintactico(tokens, symbol_table, indice);
-    }
-    else
-    {
-        return;
-    }
-}
-
-void defSintactico(std::map<int, std::vector<std::string>> tokens, std::map<std::string, std::string> &symbol_table, int indice)
-{
-    if (strcmp(symbol_table[tokens[indice][0]].c_str(), "#id") == 0)
-    {
-        indice += 1;
-
-        if (strcmp(symbol_table[tokens[indice][0]].c_str(), "#int") == 0 || strcmp(symbol_table[tokens[indice][0]].c_str(), "#float") == 0 || strcmp(symbol_table[tokens[indice][0]].c_str(), "#string") == 0)
-        {
-            indice += 1;
-
-            if (strcmp(symbol_table[tokens[indice][0]].c_str(), "#eol") == 0)
-            {
-                indice += 1;
-
-                // analisis_sintactico();
+void Parser::def_parser() {
+    if (this->match("#id", false)) {
+        if (this->match("#int", false) || this->match("#float", false) || this->match("#string", false)) {
+            if (this->match("#eol", false)) {
+                return;
             }
         }
     }
+    return;
 }
 
-void headerSintactico()
-{
+void Parser::lib_parser() {
+    return;
 }
 
-void asignacionSintactico(std::map<int, std::vector<std::string>> token, std::map<std::string, std::string> &symbol_table, int indice)
-{
-    while (strcmp(symbol_table[token[indice][0]].c_str(), "#eol") == 0)
-    {
-        // match();
+void Parser::asignacion_parser() {
+    if (this->match("#id", false)) {
+        if (this->match("logic", false)) {
+            if (this->expression_parser()) {
+                return;
+            }
+        }
     }
-}
-
-bool identificador(std::string token)
-{
-    if (strcmp(token.c_str(), "identificador") == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void asignacion(std::string tokens[])
-{
-    int indice = 0;
-    if (identificador(tokens[indice]))
-    {
-        ;
-    }
+    return;
 }
