@@ -8,3 +8,6 @@ STR _ahasi_123 <- "hoa?las  asd  @ asd";
 STR asd <- 'asd @ e rsdf ; : #$()=)(/&%$#"!|); sdfs  df sdfsfs sdg fg'
 
 CMT comentario final k jalksdjf %& 
+
+TOF nada <- TRUE;
+TOF inicio<-FALSE;

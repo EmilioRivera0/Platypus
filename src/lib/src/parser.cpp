@@ -13,7 +13,7 @@ Parser::Parser(std::map<unsigned, std::vector<std::string>> &line_tokens, std::m
     this->line_index = 0;
 }
 
-bool Parser::match(std::string tag, bool starting)
+bool Parser::match(std::string tag, bool starting = false)
 {
     if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), tag.c_str()) == 0)
     {
@@ -28,6 +28,33 @@ bool Parser::match(std::string tag, bool starting)
             this->parser_errors[this->keys[this->line_index]][this->tokens_index] = "No se esperaba el token";
         }
         return false;
+    }
+}
+
+void Parser::expresion_parser()
+{
+    if (this->match("#id") || this->match("#int") || this->match("#float") || this->match("#string") || this->match("#bool"))
+    {
+    }
+    else if (this->match("#group"))
+    {
+        this->expresion_parser();
+
+        if (this->match("#group"))
+        {
+        }
+    }
+    else if (this->match("#logic"))
+    {
+        this->expresion_parser();
+    }
+    else
+    {
+        this->expresion_parser();
+        if (this->match("#math") || this->match("#logic"))
+        {
+            this->expresion_parser();
+        }
     }
 }
 
