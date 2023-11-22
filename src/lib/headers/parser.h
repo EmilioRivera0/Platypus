@@ -3,6 +3,7 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <regex>
 
 // class declaration -------->
 class Parser
@@ -14,6 +15,7 @@ private:
     unsigned tokens_index;
     unsigned line_index;
     std::map<unsigned, std::map<unsigned, std::string>> &parser_errors;
+    std::string expression;
 
 public:
     Parser(std::map<unsigned, std::vector<std::string>> &, std::map<std::string, std::string> &, std::map<unsigned, std::map<unsigned, std::string>> &);
@@ -21,6 +23,7 @@ public:
     void def_parser();
     void lib_parser();
     void asignacion_parser();
-    void expresion_parser();
+    void conditional_parser();
     bool match(std::string, bool);
+    void expresion_parser();
 };

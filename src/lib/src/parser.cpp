@@ -1,5 +1,6 @@
 // necessary includes -------->
 #include "../headers/parser.h"
+#include "parser.h"
 
 Parser::Parser(std::map<unsigned, std::vector<std::string>> &line_tokens, std::map<std::string, std::string> &symbols_table, std::map<unsigned, std::map<unsigned, std::string>> &parser_errors)
     : tokens(line_tokens), symbol_table(symbols_table), parser_errors(parser_errors)
@@ -74,93 +75,112 @@ void Parser::analisis_parser()
         {
             this->lib_parser();
         }
-        else if (this->match("#rword", true))
+        else if (this->match("#dtype", true))
+        {
+            if (this->match("#id", false))
+            {
+                if (this->match("#eol", false))
+                {
+                    this->analisis_parser();
+                }
+                else
+                {
+                    this->asignacion_parser();
+                }
+            }
+        }
+        else if (this->match("#id", true))
         {
             this->asignacion_parser();
         }
-        else
+        else if (this->match("#if", true))
         {
+            this->conditional_parser();
         }
 
         line = this->keys[this->line_index];
     }
 }
 
-void analisis_sintactico(std::map<int, std::vector<std::string>> tokens, std::map<std::string, std::string> &symbol_table)
+void Parser::def_parser()
 {
-    int indice = 0;
-    if (strcmp(symbol_table[tokens[0][0]].c_str(), "#macro") == 0)
+    if (this->match("#id", false))
     {
-        indice += 1;
-        defSintactico(tokens, symbol_table, indice);
-        if (symbol_table.size() == indice)
+        if (this->match("#int", false) || this->match("#float", false) || this->match("#string", false))
         {
-            std::cout << "DONE";
-        }
-    }
-    else if (strcmp(symbol_table[tokens[0][0]].c_str(), "#header") == 0)
-    {
-        headerSintactico();
-    }
-    else if (strcmp(symbol_table[tokens[0][0]].c_str(), "#rword") == 0)
-    {
-        asignacionSintactico(tokens, symbol_table, indice);
-    }
-    else
-    {
-        return;
-    }
-}
-
-void defSintactico(std::map<int, std::vector<std::string>> tokens, std::map<std::string, std::string> &symbol_table, int indice)
-{
-    if (strcmp(symbol_table[tokens[indice][0]].c_str(), "#id") == 0)
-    {
-        indice += 1;
-
-        if (strcmp(symbol_table[tokens[indice][0]].c_str(), "#int") == 0 || strcmp(symbol_table[tokens[indice][0]].c_str(), "#float") == 0 || strcmp(symbol_table[tokens[indice][0]].c_str(), "#string") == 0)
-        {
-            indice += 1;
-
-            if (strcmp(symbol_table[tokens[indice][0]].c_str(), "#eol") == 0)
+            if (this->match("#eol", false))
             {
-                indice += 1;
-
-                // analisis_sintactico();
+                return;
             }
         }
     }
+    return;
 }
 
-void headerSintactico()
+void Parser::lib_parser()
 {
-}
-
-void asignacionSintactico(std::map<int, std::vector<std::string>> token, std::map<std::string, std::string> &symbol_table, int indice)
-{
-    while (strcmp(symbol_table[token[indice][0]].c_str(), "#eol") == 0)
+    if (this->match("#string", false))
     {
-        // match();
+        if (this->match("#eol", false))
+        {
+            return;
+        }
     }
 }
 
-bool identificador(std::string token)
+void Parser::asignacion_parser()
 {
-    if (strcmp(token.c_str(), "identificador") == 0)
+    if (this->match("#assign", false))
     {
-        return true;
-    }
-    else
-    {
-        return false;
+        this->expresion_parser();
+        if (this->match("#eol", false))
+        {
+            return;
+        }
     }
 }
 
-void asignacion(std::string tokens[])
+void Parser::conditional_parser()
 {
-    int indice = 0;
-    if (identificador(tokens[indice]))
+    if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "(") == 0)
     {
-        ;
+        this->tokens_index += 1;
+        // if (this->expresion_parser())
+        // {
+        if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), ")") == 0)
+        {
+            this->tokens_index += 1;
+            if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "{") == 0)
+            {
+                this->tokens_index += 1;
+                /* Implementar las comprobaciones
+                / para el analisis de la estructura
+                / dentro de un if */
+                if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "}") == 0)
+                {
+                    this->tokens_index += 1;
+
+                    if (this->match("#els", true))
+                    {
+                        if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "{") == 0)
+                        {
+                            this->tokens_index += 1;
+                            /* Implementar las comprobaciones
+                            / para el analisis de la estructura
+                            / dentro de un if */
+                            if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "}") == 0)
+                            {
+                                this->tokens_index += 1;
+                                // IF () {} ELS {}
+                                return;
+                            }
+                        }
+                    }
+                    // IF () {}
+                    return;
+                }
+            }
+        }
+        // }
     }
 }
