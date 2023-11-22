@@ -60,10 +60,22 @@ void Parser::analisis_parser() {
         }
         else if (this->match("#dtype", true))
         {
+            if (this->match("#id", false)) {
+                if (this->match("#eol", false)) {
+                    this->analisis_parser();
+                }
+                else {
+                    this->asignacion_parser();
+                }
+            }
+        }
+        else if (this->match("#id", true)) 
+        {
             this->asignacion_parser();
         }
-        else
+        else if (this->match("#if", true))
         {
+            this->conditional_parser();
         }
 
         line = this->keys[this->line_index];
@@ -82,16 +94,54 @@ void Parser::def_parser() {
 }
 
 void Parser::lib_parser() {
-    return;
+    if (this->match("#string", false)) {
+        if (this->match("#eol", false)) {
+            return;
+        }
+    }
 }
 
 void Parser::asignacion_parser() {
-    if (this->match("#id", false)) {
-        if (this->match("logic", false)) {
-            if (this->expression_parser()) {
-                return;
+    if (this->match("#assign", false)) {
+        this->expression_parser();
+        if (this->match("#eol", false)) {
+            return;
+        }
+    }
+}
+
+void Parser::conditional_parser(){
+    if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "(") == 0) {
+        this->tokens_index+=1;
+        if (this->expression_boolean_parser()) {
+            if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), ")") == 0) {
+                this->tokens_index+=1;
+                if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "{") == 0) {
+                    this->tokens_index+=1;
+                    /* Implementar las comprobaciones
+                    / para el analisis de la estructura 
+                    / dentro de un if */
+                    if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "}") == 0) { 
+                        this->tokens_index+=1;
+                        
+                        if (this->match("#els", true)) {
+                            if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "{") == 0) {
+                                this->tokens_index+=1;
+                                /* Implementar las comprobaciones
+                                / para el analisis de la estructura 
+                                / dentro de un if */
+                                if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "}") == 0) {
+                                    this->tokens_index+=1;
+                                    //IF () {} ELS {}
+                                    return;
+                                }
+                            }
+                        }
+                        // IF () {}
+                        return;
+                    }
+                }
             }
         }
     }
-    return;
 }

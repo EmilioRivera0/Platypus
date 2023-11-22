@@ -23,6 +23,8 @@ public:
     void def_parser();
     void lib_parser();
     void asignacion_parser();
+    void conditional_parser();
     bool expression_parser();
+    bool expression_boolean_parser();
     bool match(std::string, bool);
 };
