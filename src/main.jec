@@ -1,13 +1,15 @@
 CMT Hola este es un comentario
-NUM mayor <- 5..@5;
-NUM menor <- 4;
+NUM mayor <- 5.5;
+menor <- 4;
 
 CMT Este es otro comentario
 NUM diferencia <- mayor - menor;
 STR _ahasi_123 <- "hoa?las  asd  @ asd";
-STR asd <- 'asd @ e rsdf ; : #$()=)(/&%$#"!|); sdfs  df sdfsfs sdg fg'
+STR asd <- 'asd @ e rsdf ; : #$()=)(/&%$#"!|); sdfs  df sdfsfs sdg fg';
 
 CMT comentario final k jalksdjf %& 
 
 TOF nada <- TRUE;
-TOF inicio<-FALSE;
+TOF inicio<-
+
+asd <- "Hola";

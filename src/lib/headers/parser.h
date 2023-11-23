@@ -25,5 +25,8 @@ public:
     void asignacion_parser();
     void conditional_parser();
     bool match(std::string, bool);
-    void expresion_parser();
+    bool match(std::vector<std::string>, bool);
+    bool match_with_backwards(std::string);
+    void expresion_parser(bool);
+    void advance_token();
 };

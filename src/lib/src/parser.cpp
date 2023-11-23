@@ -1,7 +1,7 @@
 // necessary includes -------->
 #include "../headers/parser.h"
-#include "parser.h"
 
+// functions definition -------->
 Parser::Parser(std::map<unsigned, std::vector<std::string>> &line_tokens, std::map<std::string, std::string> &symbols_table, std::map<unsigned, std::map<unsigned, std::string>> &parser_errors)
     : tokens(line_tokens), symbol_table(symbols_table), parser_errors(parser_errors)
 {
@@ -16,57 +16,156 @@ Parser::Parser(std::map<unsigned, std::vector<std::string>> &line_tokens, std::m
 
 bool Parser::match(std::string tag, bool starting = false)
 {
-    if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), tag.c_str()) == 0)
+
+    if (this->tokens_index < this->tokens[this->keys[this->line_index]].size())
     {
-        this->tokens_index++;
-        return true;
+        std::cout << "\n--------\n"
+                  << this->tokens[this->keys[this->line_index]][this->tokens_index] << std::endl;
+        std::cout << this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]] << std::endl;
+        std::cout << "Tag: " << tag << std::endl;
+
+        if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), tag.c_str()) == 0)
+        {
+            this->advance_token();
+            return true;
+        }
+        else
+        {
+            if (!starting)
+            {
+                std::cout << "Error" << std::endl;
+                std::string error = "No se esperaba " + tokens[this->keys[this->line_index]][this->tokens_index];
+                this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
+            }
+            return false;
+        }
     }
     else
     {
+        std::string error = "Se esperaba " + tag;
+        std::cout << "Nada: " << error << std::endl;
+        this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
+        return true;
+    }
+}
+
+bool Parser::match(std::vector<std::string> tags, bool starting = false)
+{
+    if (this->tokens_index < this->tokens[this->keys[this->line_index]].size())
+    {
+        for (const std::string tag : tags)
+        {
+            std::cout << "\n--------\n"
+                      << this->tokens[this->keys[this->line_index]][this->tokens_index] << std::endl;
+            std::cout << this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]] << std::endl;
+            std::cout << "Tag: " << tag << std::endl;
+
+            if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), tag.c_str()) == 0)
+            {
+                this->advance_token();
+                return true;
+            }
+        }
         if (!starting)
         {
+            std::cout << "Error" << std::endl;
             std::string error = "No se esperaba " + tokens[this->keys[this->line_index]][this->tokens_index];
-            this->parser_errors[this->keys[this->line_index]][this->tokens_index] = "No se esperaba el token";
+            this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
         }
+        return false;
+    }
+    else
+    {
+
+        std::string error = "Se esperaba ";
+        for (const std::string tag : tags)
+        {
+            error += tag + ", ";
+        }
+        std::cout << "Nada: " << error << std::endl;
+        this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
+        return true;
+    }
+}
+
+bool Parser::match_with_backwards(std::string tag)
+{
+
+    if (this->tokens_index < this->tokens[this->keys[this->line_index]].size())
+    {
+        std::cout << "\n------------------\n"
+                  << "TI: " << this->tokens_index << std::endl;
+        std::cout << "LI: " << this->line_index << std::endl;
+        std::cout << "TsS: " << this->tokens[this->keys[this->line_index]].size() << std::endl;
+        std::cout << "KS: " << this->keys.size() << std::endl;
+
+        std::cout << "\n-------- Holaaa\n"
+                  << this->tokens[this->keys[this->line_index]][this->tokens_index] << std::endl;
+        std::cout << this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]] << std::endl;
+        std::cout << "Tag: " << tag << std::endl;
+
+        if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), tag.c_str()) == 0)
+        {
+            return true;
+        }
+        else
+        {
+            this->tokens_index--;
+            return false;
+        }
+    }
+    else
+    {
         return false;
     }
 }
 
-void Parser::expresion_parser()
+void Parser::expresion_parser(bool is_father = true)
 {
-    if (this->match("#id") || this->match("#int") || this->match("#float") || this->match("#string") || this->match("#bool"))
+    std::cout << this->tokens_index << std::endl;
+    if (this->match({"#id", "#int", "#float", "#string", "#bool"}) && (!is_father || this->match_with_backwards("#eol") || this->tokens_index == this->tokens[this->keys[this->line_index]].size()))
     {
+        return;
     }
-    else if (this->match("#group"))
+    else if (this->match("#group", true))
     {
-        this->expresion_parser();
+        this->expresion_parser(false);
 
         if (this->match("#group"))
         {
+            return;
         }
     }
-    else if (this->match("#logic"))
+    else if (this->match("#logic", true))
     {
-        this->expresion_parser();
+        this->expresion_parser(false);
     }
-    else
+
+    this->expresion_parser(false);
+    if (this->match({"#math", "#logic", ""}))
     {
-        this->expresion_parser();
-        if (this->match("#math") || this->match("#logic"))
-        {
-            this->expresion_parser();
-        }
+        this->expresion_parser(false);
     }
 }
 
-// functions definition -------->
+void Parser::advance_token()
+{
+    if (this->tokens_index == this->tokens[this->keys[this->line_index]].size() && this->line_index < this->keys.size())
+    {
+        std::cout << "Final de Linea de tokens" << std::endl;
+        this->line_index++;
+        this->tokens_index = 0;
+    }
+    else
+    {
+        this->tokens_index++;
+    }
+}
 
 void Parser::analisis_parser()
 {
-    unsigned line = this->keys[this->line_index];
-    while (this->line_index < this->keys.size() && this->tokens_index < this->tokens[line].size())
+    while ((this->line_index < this->keys.size()) || (this->tokens_index < this->tokens[this->keys[this->line_index]].size()))
     {
-
         if (this->match("#macro", true))
         {
             this->def_parser();
@@ -79,7 +178,7 @@ void Parser::analisis_parser()
         {
             if (this->match("#id", false))
             {
-                if (this->match("#eol", false))
+                if (this->match("#eol", true))
                 {
                     this->analisis_parser();
                 }
@@ -98,17 +197,31 @@ void Parser::analisis_parser()
             this->conditional_parser();
         }
 
-        line = this->keys[this->line_index];
+        std::cout << "\n------------------\n"
+                  << "TI: " << this->tokens_index << std::endl;
+        std::cout << "LI: " << this->line_index << std::endl;
+        std::cout << "TsS: " << this->tokens[this->keys[this->line_index]].size() << std::endl;
+        std::cout << "KS: " << this->keys.size() << std::endl;
+        std::cout << "L: " << this->keys[this->line_index] << std::endl;
+        std::cout << "LI < KS: " << (this->line_index < this->keys.size()) << std::endl;
+        std::cout << "TI < TsS: " << (this->tokens_index == this->tokens[this->keys[this->line_index]].size()) << std::endl;
+
+        if (this->tokens_index == this->tokens[this->keys[this->line_index]].size() && this->line_index < this->keys.size())
+        {
+            std::cout << "Final de Linea de tokens" << std::endl;
+            this->line_index++;
+            this->tokens_index = 0;
+        }
     }
 }
 
 void Parser::def_parser()
 {
-    if (this->match("#id", false))
+    if (this->match("#id"))
     {
-        if (this->match("#int", false) || this->match("#float", false) || this->match("#string", false))
+        if (this->match({"#int", "#float", "#string"}))
         {
-            if (this->match("#eol", false))
+            if (this->match("#eol"))
             {
                 return;
             }
@@ -119,9 +232,9 @@ void Parser::def_parser()
 
 void Parser::lib_parser()
 {
-    if (this->match("#string", false))
+    if (this->match("#string"))
     {
-        if (this->match("#eol", false))
+        if (this->match("#eol"))
         {
             return;
         }
@@ -130,10 +243,12 @@ void Parser::lib_parser()
 
 void Parser::asignacion_parser()
 {
-    if (this->match("#assign", false))
+    if (this->match("#assign"))
     {
         this->expresion_parser();
-        if (this->match("#eol", false))
+
+        std::cout << "Esperando eol" << std::endl;
+        if (this->match("#eol"))
         {
             return;
         }
