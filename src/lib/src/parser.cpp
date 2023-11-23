@@ -35,7 +35,8 @@ bool Parser::match(std::string tag, bool starting = false)
             {
                 std::cout << "Error" << std::endl;
                 std::string error = "No se esperaba " + tokens[this->keys[this->line_index]][this->tokens_index];
-                this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
+
+                write_error(error);
             }
             return false;
         }
@@ -44,7 +45,9 @@ bool Parser::match(std::string tag, bool starting = false)
     {
         std::string error = "Se esperaba " + tag;
         std::cout << "Nada: " << error << std::endl;
-        this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
+
+        write_error(error);
+
         return true;
     }
 }
@@ -70,7 +73,8 @@ bool Parser::match(std::vector<std::string> tags, bool starting = false)
         {
             std::cout << "Error" << std::endl;
             std::string error = "No se esperaba " + tokens[this->keys[this->line_index]][this->tokens_index];
-            this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
+
+            write_error(error);
         }
         return false;
     }
@@ -82,8 +86,9 @@ bool Parser::match(std::vector<std::string> tags, bool starting = false)
         {
             error += tag + ", ";
         }
-        std::cout << "Nada: " << error << std::endl;
-        this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
+
+        write_error(error);
+
         return true;
     }
 }
@@ -162,6 +167,17 @@ void Parser::advance_token()
     }
 }
 
+void Parser::write_error(std::string error)
+{
+    if (this->parser_errors[this->keys[this->line_index]][this->tokens_index].size() > 0)
+    {
+        std::cout << "Eror que hay: " << this->parser_errors[this->keys[this->line_index]][this->tokens_index] << std::endl;
+        this->parser_errors[this->keys[this->line_index]][this->tokens_index + 1] = error;
+        return;
+    }
+    this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
+}
+
 void Parser::analisis_parser()
 {
     while ((this->line_index < this->keys.size()) || (this->tokens_index < this->tokens[this->keys[this->line_index]].size()))
@@ -196,6 +212,10 @@ void Parser::analisis_parser()
         {
             this->conditional_parser();
         }
+        else
+        {
+            advance_token();
+        }
 
         std::cout << "\n------------------\n"
                   << "TI: " << this->tokens_index << std::endl;
@@ -206,7 +226,7 @@ void Parser::analisis_parser()
         std::cout << "LI < KS: " << (this->line_index < this->keys.size()) << std::endl;
         std::cout << "TI < TsS: " << (this->tokens_index == this->tokens[this->keys[this->line_index]].size()) << std::endl;
 
-        if (this->tokens_index == this->tokens[this->keys[this->line_index]].size() && this->line_index < this->keys.size())
+        if (this->tokens_index >= this->tokens[this->keys[this->line_index]].size() && this->line_index < this->keys.size())
         {
             std::cout << "Final de Linea de tokens" << std::endl;
             this->line_index++;

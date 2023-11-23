@@ -29,4 +29,5 @@ public:
     bool match_with_backwards(std::string);
     void expresion_parser(bool);
     void advance_token();
+    void write_error(std::string);
 };

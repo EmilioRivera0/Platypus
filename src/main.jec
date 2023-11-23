@@ -1,9 +1,9 @@
 CMT Hola este es un comentario
 NUM mayor <- 5.5;
-menor <- 4;
+menor 4;
 
 CMT Este es otro comentario
-NUM diferencia <- mayor - menor;
+NUM diferencia <- mayor - menor * mayor;
 STR _ahasi_123 <- "hoa?las  asd  @ asd";
 STR asd <- 'asd @ e rsdf ; : #$()=)(/&%$#"!|); sdfs  df sdfsfs sdg fg';
 
