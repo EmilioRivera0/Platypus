@@ -125,31 +125,60 @@ bool Parser::match_with_backwards(std::string tag)
     }
 }
 
-void Parser::expresion_parser(bool is_father = true)
+void Parser::expresion_parser(bool is_father = true, std::string final_hashtag = "#eol")
 {
+    unsigned int pre_token_index = this->tokens_index;
     std::cout << this->tokens_index << std::endl;
-    if (this->match({"#id", "#int", "#float", "#string", "#bool"}) && (!is_father || this->match_with_backwards("#eol") || this->tokens_index == this->tokens[this->keys[this->line_index]].size()))
+    std::cout << is_father << std::endl;
+
+    if (this->tokens_index == this->tokens[this->keys[this->line_index]].size())
     {
         return;
     }
     else if (this->match("#group", true))
     {
-        this->expresion_parser(false);
+
+        std::cout << (this->tokens_index + 2) << std::endl;
+        std::cout << (this->tokens[this->keys[this->line_index]].size()) << std::endl;
+        std::cout << (this->tokens_index + 2 < this->tokens[this->keys[this->line_index]].size()) << std::endl;
+        this->expresion_parser((this->tokens_index + 2 < this->tokens[this->keys[this->line_index]].size()), "#group");
+        std::cout << "Final de la llamda recursiva" << std::endl;
 
         if (this->match("#group"))
         {
-            return;
+            if (!is_father)
+            {
+                return;
+            }
+            else if (this->match_with_backwards(final_hashtag))
+            {
+                return;
+            }
+
+            this->tokens_index = pre_token_index;
         }
     }
     else if (this->match("#logic", true))
     {
-        this->expresion_parser(false);
+        this->expresion_parser((this->tokens_index + 1 < this->tokens[this->keys[this->line_index]].size()));
+    }
+    else if (this->match({"#id", "#int", "#float", "#string", "#bool"}))
+    {
+        if (!is_father)
+        {
+            return;
+        }
+        else if (this->match_with_backwards(final_hashtag))
+        {
+            return;
+        }
     }
 
-    this->expresion_parser(false);
+    this->expresion_parser(false, final_hashtag);
+
     if (this->match({"#math", "#logic", ""}))
     {
-        this->expresion_parser(false);
+        this->expresion_parser((this->tokens_index + 1 < this->tokens[this->keys[this->line_index]].size()), final_hashtag);
     }
 }
 

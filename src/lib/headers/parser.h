@@ -27,7 +27,7 @@ public:
     bool match(std::string, bool);
     bool match(std::vector<std::string>, bool);
     bool match_with_backwards(std::string);
-    void expresion_parser(bool);
+    void expresion_parser(bool, std::string);
     void advance_token();
     void write_error(std::string);
 };
