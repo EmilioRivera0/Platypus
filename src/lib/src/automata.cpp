@@ -14,9 +14,9 @@ Automata::Automata()
         {14, "#dtype"},  // PTR
         {17, "#rword"},  // FUN
         {21, "#bool"},   // FALSE
-        {23, "#rword"},  // IF
+        {23, "#if"},  // IF
         {25, "#logic"},  // OR
-        {28, "#rword"},  // ELS
+        {28, "#els"},  // ELS
         {30, "#rword"},  // EIF
         {33, "#logic"},  // AND
         {35, "#dtype"},  // ARR
@@ -40,8 +40,8 @@ Automata::Automata()
         {70, "#logic"},  // !
         {71, "#group"},  // (
         {72, "#group"},  // )
-        {73, "#group"},  // {
-        {74, "#group"},  // }
+        {73, "#llavea"},  // {
+        {74, "#llavec"},  // }
         {75, "#group"},  // [
         {76, "#group"},  // ]
         {77, "#math"},   // +

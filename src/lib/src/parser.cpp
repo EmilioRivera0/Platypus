@@ -14,9 +14,12 @@ Parser::Parser(std::map<unsigned, std::vector<std::string>> &line_tokens, std::m
     this->line_index = 0;
 }
 
-bool Parser::match(std::string tag, bool starting = false)
+bool Parser::match(std::string tag, bool starting = false, bool is_conditional = false)
 {
-
+    //? Conocer si el contador de linea ya sobrepaso las lineas de codigo
+    // if (this->line_index >= this->tokens.size()) {
+    //     return false;
+    // }
     if (this->tokens_index < this->tokens[this->keys[this->line_index]].size())
     {
         std::cout << "\n--------\n"
@@ -26,7 +29,9 @@ bool Parser::match(std::string tag, bool starting = false)
 
         if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), tag.c_str()) == 0)
         {
-            this->advance_token();
+            if (!is_conditional) {
+                this->advance_token();
+            }
             return true;
         }
         else
@@ -37,18 +42,34 @@ bool Parser::match(std::string tag, bool starting = false)
                 std::string error = "No se esperaba " + tokens[this->keys[this->line_index]][this->tokens_index];
 
                 write_error(error);
+                std::cout<<"match not starting"<<std::endl;
             }
             return false;
         }
     }
     else
     {
-        std::string error = "Se esperaba " + tag;
-        std::cout << "Nada: " << error << std::endl;
+        // if (strcmp("#llavea", tag.c_str()) == 0 || strcmp("#llavec", tag.c_str()) == 0 || strcmp("#els", tag.c_str()) == 0) {
+        //     this->advance_token();
+        //     return this->match(tag, starting);
+        // }
+        // else{    
+        //     std::string error = "Se esperaba " + tag;
+        //     std::cout << "Nada: " << error << std::endl;
 
-        write_error(error);
+        //     write_error(error);
+        //     std::cout<<"match fin"<<std::endl;
+        // }
+        if (!starting)
+        {
+            std::string error = "Se esperaba " + tag;
+            std::cout << "Nada: " << error << std::endl;
 
-        return true;
+            write_error(error);
+            std::cout<<"match fin"<<std::endl;
+        }
+        // return true; //?original
+        return false;
     }
 }
 
@@ -125,8 +146,11 @@ bool Parser::match_with_backwards(std::string tag)
     }
 }
 
-void Parser::expresion_parser(bool is_father = true, std::string final_hashtag = "#eol")
+void Parser::expresion_parser(bool is_father = true, std::string final_hashtag = "#eol", bool is_conditional = false)
 {
+    // if (is_conditional) {
+    //     final_hashtag = "#group";
+    // }
     unsigned int pre_token_index = this->tokens_index;
     std::cout << this->tokens_index << std::endl;
     std::cout << is_father << std::endl;
@@ -200,14 +224,14 @@ void Parser::write_error(std::string error)
 {
     if (this->parser_errors[this->keys[this->line_index]][this->tokens_index].size() > 0)
     {
-        std::cout << "Eror que hay: " << this->parser_errors[this->keys[this->line_index]][this->tokens_index] << std::endl;
+        std::cout << "Error que hay: " << this->parser_errors[this->keys[this->line_index]][this->tokens_index] << std::endl;
         this->parser_errors[this->keys[this->line_index]][this->tokens_index + 1] = error;
         return;
     }
     this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
 }
 
-void Parser::analisis_parser()
+void Parser::analisis_parser(bool is_conditional = false)
 {
     while ((this->line_index < this->keys.size()) || (this->tokens_index < this->tokens[this->keys[this->line_index]].size()))
     {
@@ -221,17 +245,7 @@ void Parser::analisis_parser()
         }
         else if (this->match("#dtype", true))
         {
-            if (this->match("#id", false))
-            {
-                if (this->match("#eol", true))
-                {
-                    this->analisis_parser();
-                }
-                else
-                {
-                    this->asignacion_parser();
-                }
-            }
+            this->declaracion_parser();
         }
         else if (this->match("#id", true))
         {
@@ -241,9 +255,16 @@ void Parser::analisis_parser()
         {
             this->conditional_parser();
         }
+        else if (is_conditional && this->match("#llavec", true, true)) {
+            break;
+        }
         else
         {
-            advance_token();
+            // std::cout << "Error" << std::endl;
+            // std::string error = "No se esperaba " + tokens[this->keys[this->line_index]][this->tokens_index];
+
+            // write_error(error);
+            this->advance_token();
         }
 
         std::cout << "\n------------------\n"
@@ -290,61 +311,55 @@ void Parser::lib_parser()
     }
 }
 
+void Parser::declaracion_parser() 
+{
+    if (this->match("#id", false)) 
+    {
+        if (!this->match("#eol", true)) 
+        {
+            this->asignacion_parser();
+        }
+    }
+}
+
 void Parser::asignacion_parser()
 {
     if (this->match("#assign"))
     {
         this->expresion_parser();
-
-        std::cout << "Esperando eol" << std::endl;
-        if (this->match("#eol"))
-        {
-            return;
-        }
+        this->advance_token();
+        // std::cout << "Esperando eol" << std::endl;
+        // if (this->match("#eol"))
+        // {
+        //     return;
+        // }
     }
 }
 
 void Parser::conditional_parser()
 {
-    if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "(") == 0)
+    if (this->match("#group")) // (
     {
-        this->tokens_index += 1;
-        // if (this->expresion_parser())
-        // {
-        if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), ")") == 0)
+        this->expresion_parser(true, "#group", true); // )
+        this->advance_token();
+        if (this->match("#llavea")) //{
         {
-            this->tokens_index += 1;
-            if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "{") == 0)
-            {
-                this->tokens_index += 1;
-                /* Implementar las comprobaciones
-                / para el analisis de la estructura
-                / dentro de un if */
-                if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "}") == 0)
+            /* MAS CODIGO */
+            this->analisis_parser(true); //}
+            if (this->match("#llavec")) {
+                if (this->match("#els", true))
                 {
-                    this->tokens_index += 1;
-
-                    if (this->match("#els", true))
+                    if (this->match("#llavea")) // {
                     {
-                        if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "{") == 0)
-                        {
-                            this->tokens_index += 1;
-                            /* Implementar las comprobaciones
-                            / para el analisis de la estructura
-                            / dentro de un if */
-                            if (strcmp(this->symbol_table[this->tokens[this->keys[this->line_index]][this->tokens_index]].c_str(), "}") == 0)
-                            {
-                                this->tokens_index += 1;
-                                // IF () {} ELS {}
-                                return;
-                            }
-                        }
+                        this->advance_token();
+                        /* MAS CODIGO */
+                        this->analisis_parser(true); //}
+                        if (this->match("#llavec")) {
+
+                           }
                     }
-                    // IF () {}
-                    return;
                 }
             }
         }
-        // }
     }
 }

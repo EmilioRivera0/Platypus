@@ -13,3 +13,13 @@ TOF nada <- TRUE;
 TOF inicio<-
 
 asd <- "Hola";
+
+IF (4) {
+a <- 4;
+b <- 5;
+}
+ELS {
+STR ppp <- "els palabra";
+NUM nnn;
+nnn <- 5; 
+}
