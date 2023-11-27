@@ -368,6 +368,7 @@ void Parser::asignacion_parser()
 
 void Parser::conditional_parser()
 {
+    bool is_eif = true;
     if (this->match("#group")) // (
     {
         this->expresion_parser(true, "#group"); 
@@ -379,11 +380,36 @@ void Parser::conditional_parser()
                 this->sub_analisis_parser(); 
                 if (this->match("#llavec")) //}
                 {
+                    while (is_eif)
+                    {
+                        if (this->match("#eif", true)) // EIF
+                        {
+                            if (this->match("#group")) // (
+                            {
+                                this->expresion_parser(true, "#group");
+                                if (this->match("#group")) //)
+                                {
+                                    if (this->match("#llavea")) //{
+                                    {
+                                        /* MAS CODIGO */
+                                        this->sub_analisis_parser(); 
+                                        if (this->match("#llavec")) //}
+                                        {
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else 
+                        {
+                            is_eif = false;
+                        }
+                    } 
                     if (this->match("#els", true))
                     {
                         if (this->match("#llavea")) // {
                         {
-                            this->advance_token();
                             /* MAS CODIGO */
                             this->sub_analisis_parser(); 
                             if (this->match("#llavec")) //}

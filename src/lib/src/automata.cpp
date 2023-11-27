@@ -17,7 +17,7 @@ Automata::Automata()
         {23, "#if"},  // IF
         {25, "#logic"},  // OR
         {28, "#els"},  // ELS
-        {30, "#rword"},  // EIF
+        {30, "#eif"},  // EIF
         {33, "#logic"},  // AND
         {35, "#dtype"},  // ARR
         {38, "#rword"},  // CMT

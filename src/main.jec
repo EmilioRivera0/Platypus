@@ -28,5 +28,26 @@ ELS
 
 LUP ( TRUE ) 
 {
-    menor <- menor - 1;
+    IF (menor > 1){
+        menor <- menor - 1;
+    }
+    ELS {
+        LUP (FALSE) {
+            menor <- menor + 1;
+        }
+    }
+}
+
+IF (TRUE) {
+    nnn <- 5;
+}
+EIF (TRUE)
+{
+    nnn <- 5;
+}
+EIF (TRUE){
+    nnn <- 5;
+}
+ELS {
+    nnn <- 4;
 }
