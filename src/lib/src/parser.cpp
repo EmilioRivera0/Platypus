@@ -146,11 +146,8 @@ bool Parser::match_with_backwards(std::string tag)
     }
 }
 
-void Parser::expresion_parser(bool is_father = true, std::string final_hashtag = "#eol", bool is_conditional = false)
+void Parser::expresion_parser(bool is_father = true, std::string final_hashtag = "#eol")
 {
-    // if (is_conditional) {
-    //     final_hashtag = "#group";
-    // }
     unsigned int pre_token_index = this->tokens_index;
     std::cout << this->tokens_index << std::endl;
     std::cout << is_father << std::endl;
@@ -208,7 +205,8 @@ void Parser::expresion_parser(bool is_father = true, std::string final_hashtag =
 
 void Parser::advance_token()
 {
-    if (this->tokens_index == this->tokens[this->keys[this->line_index]].size() && this->line_index < this->keys.size())
+    std::cout<<this->tokens_index<<std::endl;
+    if (this->tokens_index+1 == this->tokens[this->keys[this->line_index]].size() && this->line_index < this->keys.size())
     {
         std::cout << "Final de Linea de tokens" << std::endl;
         this->line_index++;
@@ -231,7 +229,7 @@ void Parser::write_error(std::string error)
     this->parser_errors[this->keys[this->line_index]][this->tokens_index] = error;
 }
 
-void Parser::analisis_parser(bool is_conditional = false)
+void Parser::analisis_parser()
 {
     while ((this->line_index < this->keys.size()) || (this->tokens_index < this->tokens[this->keys[this->line_index]].size()))
     {
@@ -255,8 +253,9 @@ void Parser::analisis_parser(bool is_conditional = false)
         {
             this->conditional_parser();
         }
-        else if (is_conditional && this->match("#llavec", true, true)) {
-            break;
+        else if (this->match("#lup", true))
+        {
+            this->loop_parser();
         }
         else
         {
@@ -276,11 +275,42 @@ void Parser::analisis_parser(bool is_conditional = false)
         std::cout << "LI < KS: " << (this->line_index < this->keys.size()) << std::endl;
         std::cout << "TI < TsS: " << (this->tokens_index == this->tokens[this->keys[this->line_index]].size()) << std::endl;
 
-        if (this->tokens_index >= this->tokens[this->keys[this->line_index]].size() && this->line_index < this->keys.size())
+        
+        // if (this->tokens_index >= this->tokens[this->keys[this->line_index]].size() && this->line_index < this->keys.size())
+        // {
+        //     std::cout << "Final de Linea de tokens" << std::endl;
+        //     this->line_index++;
+        //     this->tokens_index = 0;
+        // }
+    }
+}
+
+void Parser::sub_analisis_parser()
+{
+    while ((this->line_index < this->keys.size()) || (this->tokens_index < this->tokens[this->keys[this->line_index]].size()))
+    {
+        if (this->match("#dtype", true))
         {
-            std::cout << "Final de Linea de tokens" << std::endl;
-            this->line_index++;
-            this->tokens_index = 0;
+            this->declaracion_parser();
+        }
+        else if (this->match("#id", true))
+        {
+            this->asignacion_parser();
+        }
+        else if (this->match("#if", true))
+        {
+            this->conditional_parser();
+        }
+        else if (this->match("#lup", true))
+        {
+            this->loop_parser();
+        }
+        else if (this->match("#llavec", true, true)) {
+            break;
+        }
+        else
+        {
+            this->advance_token();
         }
     }
 }
@@ -340,24 +370,48 @@ void Parser::conditional_parser()
 {
     if (this->match("#group")) // (
     {
-        this->expresion_parser(true, "#group", true); // )
-        this->advance_token();
-        if (this->match("#llavea")) //{
+        this->expresion_parser(true, "#group"); 
+        if (this->match("#group")) // )
         {
-            /* MAS CODIGO */
-            this->analisis_parser(true); //}
-            if (this->match("#llavec")) {
-                if (this->match("#els", true))
+            if (this->match("#llavea")) //{
+            {
+                /* MAS CODIGO */
+                this->sub_analisis_parser(); 
+                if (this->match("#llavec")) //}
                 {
-                    if (this->match("#llavea")) // {
+                    if (this->match("#els", true))
                     {
-                        this->advance_token();
-                        /* MAS CODIGO */
-                        this->analisis_parser(true); //}
-                        if (this->match("#llavec")) {
-
-                           }
+                        if (this->match("#llavea")) // {
+                        {
+                            this->advance_token();
+                            /* MAS CODIGO */
+                            this->sub_analisis_parser(); 
+                            if (this->match("#llavec")) //}
+                            {
+                                return;
+                            }
+                        }
                     }
+                }
+            }
+        }
+    }
+}
+
+void Parser::loop_parser()
+{
+    if (this->match("#group")) //(
+    {
+        this->expresion_parser(true, "#group");
+        if (this->match("#group"))  // )
+        {
+            if (this->match("#llavea")) //{
+            {
+                /* MAS CODIGO */
+                this->sub_analisis_parser();
+                if (this->match("#llavec")) //}
+                {
+                    return;
                 }
             }
         }

@@ -9,7 +9,7 @@ Automata::Automata()
     this->final_states = {
         {4, "#dtype"},   // NUM
         {5, "#logic"},   // NOT
-        {8, "#rword"},   // LUP
+        {8, "#lup"},   // LUP
         {11, "#rword"},  // RTN
         {14, "#dtype"},  // PTR
         {17, "#rword"},  // FUN
@@ -527,8 +527,11 @@ void Automata::run(std::string line, std::map<std::string, std::string> &symbols
             // save column number where the error/not matching character is found and output it
             else
             {
-                line_errors.push_back(i);
-                std::cout << "\nSymbol Not Recognised: " << line[i] << std::endl;
+                if (!(line[i] == ' ' || line[i] == '\t')) 
+                {
+                    line_errors.push_back(i);
+                    std::cout << "\nSymbol Not Recognised: " << line[i] << std::endl;
+                }
             }
             // check if current character is not a white space, a tab or it is not accepted by the automata
             if (!has_match)

@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
         print_map(file_tokens);
 
         Parser parser(file_tokens, symbols_table, parser_errors);
-        parser.analisis_parser(false);
+        parser.analisis_parser();
 
         std::cout << "\n\n Errores Sintacticos" << std::endl;
         print_map(parser_errors);

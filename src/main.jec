@@ -1,6 +1,6 @@
 CMT Hola este es un comentario
 NUM mayor <- 5.5;
-menor <- 4;
+menor <- 3;
 
 CMT Este es otro comentario
 NUM diferencia <- mayor <-> menor + 5;
@@ -10,16 +10,23 @@ STR asd <- 'asd @ e rsdf ; : #$()=)(/&%$#"!|); sdfs  df sdfsfs sdg fg';
 CMT comentario final k jalksdjf %& 
 
 TOF nada <- TRUE;
-TOF inicio<-
+TOF inicio<-TRUE;
 
 asd <- "Hola";
 
-IF (4) {
-a <- 4;
-b <- 5;
+IF (4) 
+{
+    a <- 2;
+    b <- 5;
+} 
+ELS 
+{
+    STR ppp <- "els palabra";
+    NUM nnn;
+    nnn <- 5; 
 }
-ELS {
-STR ppp <- "els palabra";
-NUM nnn;
-nnn <- 5; 
+
+LUP ( TRUE ) 
+{
+    menor <- menor - 1;
 }
