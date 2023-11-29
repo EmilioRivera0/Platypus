@@ -9,8 +9,10 @@ STR asd <- 'asd @ e rsdf ; : #$()=)(/&%$#"!|); sdfs  df sdfsfs sdg fg';
 
 CMT comentario final k jalksdjf %& 
 
+CMT análisis
+
 TOF nada <- TRUE;
-TOF inicio<-TRUE;
+TOF inicio<-TRUE
 
 asd <- "Hola";
 
@@ -23,10 +25,11 @@ ELS
 {
     STR ppp <- "els palabra";
     NUM nnn;
-    nnn <- 5; 
+    nnn <- 5
 }
 
-LUP ( NUM nada <- 5; TRUE; nada <- nada + 1;) 
+
+LUP ( NUM nada <- 5; menor > 1; nada <- nada + 1;) 
 {
     IF (menor > 1){
         menor <- menor - 1;

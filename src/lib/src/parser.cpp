@@ -120,7 +120,15 @@ bool Parser::match_with_backwards(std::string tag)
         }
         else
         {
-            this->tokens_index--;
+            if (this->tokens_index == 0)
+            {
+                this->line_index--;
+                this->tokens_index = this->tokens[this->keys[this->line_index]].size() - 1;
+            }
+            else
+            {
+                this->tokens_index--;
+            }
             return false;
         }
     }
