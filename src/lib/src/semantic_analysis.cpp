@@ -26,7 +26,7 @@ std::vector<std::string> semantic_analyzer(const std::map<unsigned,std::vector<s
     // check if line starts with data type reserved keyword or with an identifier either store a new variable or search for it
     if (std::regex_match(it.second[0], data_type)) {
       // store new variable and its data type
-      data_types_table.insert(std::pair(it.second[1], it.second[0]));
+      data_types_table.insert(std::pair<std::string, std::string>(it.second[1], it.second[0]));
       type = it.second[0];
       start_index = 3;
     }
