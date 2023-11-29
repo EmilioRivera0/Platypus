@@ -43,12 +43,14 @@ int main(int argc, char *argv[])
         std::cout << "\n\n";
 
         semantic_errors = semantic_analyzer(file_tokens, symbols_table);
-        if (semantic_errors.size() > 0){
-          std::cout << "Semantic Errors\n" << std:: endl; 
-          for (const auto it : semantic_errors)
-            std::cout << it << std::endl;
-        }
 
+        if (semantic_errors.size() > 0)
+        {
+            std::cout << "Semantic Errors\n"
+                      << std::endl;
+            for (const auto it : semantic_errors)
+                std::cout << it << std::endl;
+        }
     }
     // output the exception message
     catch (const std::exception &e)

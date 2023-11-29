@@ -10,7 +10,7 @@
 class Parser
 {
 private:
-    std::map<unsigned, std::vector<std::string>> &tokens;
+    std::map<unsigned, std::vector<std::string>> tokens;
     std::vector<unsigned> keys;
     std::map<std::string, std::string> &symbol_table;
     unsigned tokens_index;
@@ -19,7 +19,7 @@ private:
     std::string expression;
 
 public:
-    Parser(std::map<unsigned, std::vector<std::string>> &, std::map<std::string, std::string> &, std::map<unsigned, std::map<unsigned, std::string>> &);
+    Parser(std::map<unsigned, std::vector<std::string>>, std::map<std::string, std::string> &, std::map<unsigned, std::map<unsigned, std::string>> &);
     bool match(std::string, bool, bool);
     bool match(std::vector<std::string>, bool);
     bool match_with_backwards(std::string);

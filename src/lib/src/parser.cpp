@@ -2,7 +2,7 @@
 #include "../headers/parser.h"
 
 // functions definition -------->
-Parser::Parser(std::map<unsigned, std::vector<std::string>> &line_tokens, std::map<std::string, std::string> &symbols_table, std::map<unsigned, std::map<unsigned, std::string>> &parser_errors)
+Parser::Parser(std::map<unsigned, std::vector<std::string>> line_tokens, std::map<std::string, std::string> &symbols_table, std::map<unsigned, std::map<unsigned, std::string>> &parser_errors)
     : tokens(line_tokens), symbol_table(symbols_table), parser_errors(parser_errors)
 {
     for (const auto &par : tokens)
