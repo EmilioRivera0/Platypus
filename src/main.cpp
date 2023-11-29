@@ -8,6 +8,7 @@
 #include "lib/headers/lexical_analysis.h"
 #include "lib/headers/console_output.h"
 #include "lib/headers/semantic_analysis.h"
+#include "lib/headers/parser.h"
 
 // program entry point -------->
 int main(int argc, char *argv[])
@@ -18,6 +19,7 @@ int main(int argc, char *argv[])
     std::map<std::string, std::string> symbols_table;
     std::map<unsigned, std::map<unsigned, char>> lexical_errors;
     std::map<unsigned, std::vector<std::string>> file_tokens;
+    std::map<unsigned, std::map<unsigned, std::string>> parser_errors;
 
     try
     {
@@ -32,6 +34,11 @@ int main(int argc, char *argv[])
         print_map(symbols_table);
         std::cout << "\n\n Tokens por linea" << std::endl;
         print_map(file_tokens);
+        Parser parser(file_tokens, symbols_table, parser_errors);
+        parser.analisis_parser();
+
+        std::cout << "\n\n Errores Sintacticos" << std::endl;
+        print_map(parser_errors);
         std::cout << "\n\n";
         semantic_errors = semantic_analyzer(file_tokens, symbols_table);
         if (semantic_errors.size() > 0){
@@ -39,6 +46,7 @@ int main(int argc, char *argv[])
           for (const auto it : semantic_errors)
             std::cout << it << std::endl;
         }
+
     }
     // output the exception message
     catch (const std::exception &e)

@@ -1,15 +1,53 @@
 CMT Hola este es un comentario
-NUM mayor <- 5..@5;
-NUM menor <- 4;
+NUM mayor <- 5.5;
+menor <- 3;
 
 CMT Este es otro comentario
-NUM diferencia <- mayor - menor;
+NUM diferencia <- mayor <-> menor + 5;
 STR _ahasi_123 <- "hoa?las  asd  @ asd";
-STR asd <- 'asd @ e rsdf ; : #$()=)(/&%$#"!|); sdfs  df sdfsfs sdg fg'
-_ahasi_123 <- "Hellow World!";
-STR str_ <- 'sdg fg'
-hasi_123 <- "123";
-NUM diferencia <- mayor + menor;
-STR dif <- mayor || menor;
-dif <- 5 || menor;
+STR asd <- 'asd @ e rsdf ; : #$()=)(/&%$#"!|); sdfs  df sdfsfs sdg fg';
+
 CMT comentario final k jalksdjf %& 
+
+TOF nada <- TRUE;
+TOF inicio<-TRUE;
+
+asd <- "Hola";
+
+IF (4) 
+{
+    a <- 2;
+    b <- 5;
+} 
+ELS 
+{
+    STR ppp <- "els palabra";
+    NUM nnn;
+    nnn <- 5; 
+}
+
+LUP ( NUM nada <- 5; TRUE; nada <- nada + 1;) 
+{
+    IF (menor > 1){
+        menor <- menor - 1;
+    }
+    ELS {
+        LUP (FALSE) {
+            menor <- menor + 1;
+        }
+    }
+}
+
+IF (TRUE) {
+    nnn <- 5;
+}
+EIF (TRUE)
+{
+    nnn <- 5;
+}
+EIF (TRUE){
+    nnn <- 5;
+}
+ELS {
+    nnn <- 4;
+}

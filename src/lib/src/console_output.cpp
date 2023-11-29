@@ -33,6 +33,26 @@ void print_map(std::map<unsigned, std::map<unsigned, char>> map)
     std::cout << "\n\n";
 }
 
+void print_map(std::map<unsigned, std::map<unsigned, std::string>> map)
+{
+    // print generated errors specifying line, column and character
+    std::cout << std::left << std::setw(8) << "Line"
+              << "    |    " << std::setw(8) << "Token"
+              << "    |    " << std::setw(20) << "Mensaje"
+              << "    |    " << std::endl;
+    for (const auto &par : map)
+    {
+        for (const auto &error : par.second)
+        {
+            std::cout << std::left << std::setw(8) << par.first << "    |    ";
+            std::cout << std::setw(8) << error.first << "    |    ";
+            std::cout << std::setw(20) << error.second << "    |    ";
+            std::cout << std::endl;
+        }
+    }
+    std::cout << "\n\n";
+}
+
 void print_map(std::map<unsigned, std::vector<std::string>> map)
 {
     std::cout << std::left << std::setw(6) << "Linea"
