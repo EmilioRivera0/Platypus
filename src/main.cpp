@@ -7,12 +7,14 @@
 #include "lib/headers/parameter_engine.h"
 #include "lib/headers/lexical_analysis.h"
 #include "lib/headers/console_output.h"
+#include "lib/headers/semantic_analysis.h"
 
 // program entry point -------->
 int main(int argc, char *argv[])
 {
     // program variables
     std::ifstream source_code_file;
+    std::vector<std::string> semantic_errors;
     std::map<std::string, std::string> symbols_table;
     std::map<unsigned, std::map<unsigned, char>> lexical_errors;
     std::map<unsigned, std::vector<std::string>> file_tokens;
@@ -22,7 +24,6 @@ int main(int argc, char *argv[])
         // open source file
         source_code_file = open_jec_file(get_parameters(argc, argv));
         lexical_analysis(source_code_file, symbols_table, lexical_errors, file_tokens);
-
         if (lexical_errors.size() > 0)
         {
             print_map(lexical_errors);
@@ -31,6 +32,13 @@ int main(int argc, char *argv[])
         print_map(symbols_table);
         std::cout << "\n\n Tokens por linea" << std::endl;
         print_map(file_tokens);
+        std::cout << "\n\n";
+        semantic_errors = semantic_analyzer(file_tokens, symbols_table);
+        if (semantic_errors.size() > 0){
+          std::cout << "Semantic Errors\n" << std:: endl; 
+          for (const auto it : semantic_errors)
+            std::cout << it << std::endl;
+        }
     }
     // output the exception message
     catch (const std::exception &e)

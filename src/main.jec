@@ -6,5 +6,10 @@ CMT Este es otro comentario
 NUM diferencia <- mayor - menor;
 STR _ahasi_123 <- "hoa?las  asd  @ asd";
 STR asd <- 'asd @ e rsdf ; : #$()=)(/&%$#"!|); sdfs  df sdfsfs sdg fg'
-
+_ahasi_123 <- "Hellow World!";
+STR str_ <- 'sdg fg'
+hasi_123 <- "123";
+NUM diferencia <- mayor + menor;
+STR dif <- mayor || menor;
+dif <- 5 || menor;
 CMT comentario final k jalksdjf %& 
