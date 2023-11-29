@@ -34,12 +34,14 @@ int main(int argc, char *argv[])
         print_map(symbols_table);
         std::cout << "\n\n Tokens por linea" << std::endl;
         print_map(file_tokens);
+    /*
         Parser parser(file_tokens, symbols_table, parser_errors);
         parser.analisis_parser();
 
         std::cout << "\n\n Errores Sintacticos" << std::endl;
         print_map(parser_errors);
         std::cout << "\n\n";
+        */
         semantic_errors = semantic_analyzer(file_tokens, symbols_table);
         if (semantic_errors.size() > 0){
           std::cout << "Semantic Errors\n" << std:: endl; 

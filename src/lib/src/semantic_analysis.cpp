@@ -17,8 +17,9 @@ std::vector<std::string> semantic_analyzer(const std::map<unsigned,std::vector<s
   // literal values
   std::regex str("((\\'.*\\')|(\u0022.*\u0022))");
   std::regex num("([-])?([0-9])+([.]([0-9])+)?");
-  // operators
-  std::regex skip("(([|][|])|(&&)|(<!>)|(<->)|(<|>)(=)?|\\!|NOT|AND|OR|[*]|[+]|/|-|%|\\;|<-)");
+  std::regex tof("(TRUE|FALSE)");
+  // operators 
+  std::regex skip("(([|][|])|(&&)|(<!>)|(<->)|(<|>)(=)?|\\!|NOT|AND|OR|[*]|[+]|/|-|%|\\;|<-|IF|CMT|ARR|E(IF|LS)|[$](DEF|LIB)|LUP|RTN|FUN)");
 
   // iterate each line of code
   for (const auto it : file_tokens){
@@ -31,7 +32,7 @@ std::vector<std::string> semantic_analyzer(const std::map<unsigned,std::vector<s
     }
     else if (std::regex_match(it.second[0], identifier)) {
       // check if variable was defined previously
-      if (data_types_table.find(it.second[0]) == data_types_table.end()) {
+      if (data_types_table.find(it.second[0]) == data_types_table.end() && !(std::regex_match(it.second[0], skip))) {
         temp = "Line " + std::to_string(it.first) + ": \"" + it.second[0] + "\" is not declared.";
         semantic_errors.push_back(temp);
         continue;
@@ -55,6 +56,9 @@ std::vector<std::string> semantic_analyzer(const std::map<unsigned,std::vector<s
       }
       // continue operations since data types are correctly used
       else if ((type == "STR" || type == "STX") && std::regex_match(it.second[token_index], str)){
+        continue;
+      }
+      else if ((type == "TOF") && std::regex_match(it.second[token_index], tof)){
         continue;
       }
       // continue operations since data types are correctly used
