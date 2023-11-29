@@ -26,7 +26,7 @@ ELS
     nnn <- 5; 
 }
 
-LUP ( TRUE ) 
+LUP ( NUM nada <- 5; TRUE; nada <- nada + 1;) 
 {
     IF (menor > 1){
         menor <- menor - 1;
